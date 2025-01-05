@@ -127,8 +127,8 @@ def save_results_to_json(results, output_dir):
     logger.info(f"Results saved to {output_file}")
 
 if __name__ == "__main__":
-    folder_path = r"E:\ai modle\data"  # Replace with your folder path
-    output_dir = r"E:\ai modle\outputs"  # Replace with your output directory
+    folder_path = r"D:\COR\NLP model\data"  # Replace with your folder path
+    output_dir = r"D:\COR\NLP model\outputs"  # Replace with your output directory
     if not os.path.exists(folder_path):
         logger.error(f"Folder {folder_path} not found.")
     else:
