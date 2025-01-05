@@ -1,0 +1,95 @@
+[
+    {
+        "Hamza_Mounir_CV.pdf": {
+            "emails": [
+                "7amzahamza8@gmail.com"
+            ],
+            "phones": [
+                "0127006792"
+            ],
+            "linkedin": [
+                "linkedin.com/in/hamza"
+            ],
+            "github": [
+                "github.com/7amzahamza8"
+            ],
+            "education": [],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [],
+            "languages": [],
+            "names": [
+                "Java",
+                "Problem Solvi",
+                "Hamza Mohammed Mounir El -Marghany Phone",
+                "Java Database Management:"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": [],
+            "locations": [
+                "Flutter"
+            ],
+            "dates": [
+                "2026"
+            ]
+        }
+    },
+    {
+        "John_Doe_CV.docx": {
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Master",
+                "Graduated",
+                "Bachelor"
+            ],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [],
+            "languages": [],
+            "names": [
+                "John Doe Email",
+                "IBM Watson - Database",
+                "IBM Cloud",
+                "Spring Boot",
+                "Cassandra",
+                "Docker",
+                "macOS - Soft Skills",
+                "JavaScript - Cloud Technologies",
+                "IBM Watson",
+                "Austin Graduated",
+                "C++"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": [],
+            "locations": [
+                "AI",
+                "San Francisco",
+                "React",
+                "San Jose",
+                "Berkeley Graduated",
+                "Jenkins"
+            ],
+            "dates": [
+                "2017",
+                "daily",
+                "June 2020",
+                "May 2020 - Worked",
+                "May 2017",
+                "5+ years"
+            ]
+        }
+    }
+]

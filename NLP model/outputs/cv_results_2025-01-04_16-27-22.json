@@ -1,0 +1,93 @@
+[
+    {
+        "Hamza_Mounir_CV.pdf": {
+            "emails": [
+                "7amzahamza8@gmail.com"
+            ],
+            "phones": [
+                "0127006792"
+            ],
+            "linkedin": [
+                "linkedin.com/in/hamza"
+            ],
+            "github": [
+                "github.com/7amzahamza8"
+            ],
+            "education": [],
+            "certifications": [
+                "Certification"
+            ],
+            "technical_skills": [],
+            "projects": [
+                [
+                    "Projects",
+                    "Native (Mother Tongue) English: Basic proficiency "
+                ]
+            ],
+            "summary": ""
+        }
+    },
+    {
+        "John_Doe_CV.docx": {
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Master",
+                "Graduated",
+                "Bachelor",
+                "Graduated"
+            ],
+            "certifications": [
+                "Engineer",
+                "Certification"
+            ],
+            "technical_skills": [],
+            "projects": [],
+            "summary": ""
+        }
+    },
+    {
+        "s.txt": {
+            "emails": [
+                "john.doe@example.com"
+            ],
+            "phones": [
+                "(123) 456-7890"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Master",
+                "University",
+                "Bachelor",
+                "University"
+            ],
+            "certifications": [
+                "Engineer",
+                "Certification"
+            ],
+            "technical_skills": [],
+            "projects": [
+                [
+                    "Projects",
+                    "Developed a machine learning model to analyze and extract key data from resumes. Cloud"
+                ]
+            ],
+            "summary": ""
+        }
+    }
+]

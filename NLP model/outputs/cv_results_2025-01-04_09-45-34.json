@@ -1,0 +1,21 @@
+[
+    {
+        "John_Doe_CV.docx": {
+            "names": [
+                "IBM Watson"
+            ],
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "education": [],
+            "experience": [],
+            "linkedin": [],
+            "github": [],
+            "certifications": [],
+            "skills": []
+        }
+    }
+]

@@ -1,0 +1,93 @@
+[
+    {
+        "Hamza_Mounir_CV.pdf": {
+            "emails": [
+                "7amzahamza8@gmail.com"
+            ],
+            "phones": [
+                "0127006792"
+            ],
+            "linkedin": [
+                "linkedin.com/in/hamza"
+            ],
+            "github": [
+                "github.com/7amzahamza8"
+            ],
+            "education": [],
+            "certifications": [],
+            "names": [
+                "Hamza Mohammed Mounir El -Marghany Phone",
+                "Java",
+                "Java Database Management:",
+                "Problem Solvi",
+                "Java"
+            ],
+            "locations": [
+                "Flutter"
+            ],
+            "dates": [
+                "2026"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    },
+    {
+        "John_Doe_CV.docx": {
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Master",
+                "Graduated",
+                "Bachelor",
+                "Graduated"
+            ],
+            "certifications": [],
+            "names": [
+                "John Doe Email",
+                "IBM Watson",
+                "Austin Graduated",
+                "C++",
+                "JavaScript - Cloud Technologies",
+                "IBM Cloud",
+                "IBM Watson - Database",
+                "Cassandra",
+                "Docker",
+                "Spring Boot",
+                "macOS - Soft Skills"
+            ],
+            "locations": [
+                "AI",
+                "San Francisco",
+                "San Jose",
+                "Berkeley Graduated",
+                "AI",
+                "Jenkins",
+                "React",
+                "AI"
+            ],
+            "dates": [
+                "5+ years",
+                "June 2020",
+                "May 2017",
+                "May 2020 - Worked",
+                "daily",
+                "2017"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    }
+]

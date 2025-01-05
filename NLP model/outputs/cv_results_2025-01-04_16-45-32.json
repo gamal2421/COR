@@ -1,0 +1,68 @@
+[
+    {
+        "Anne Mckinney_CV.docx": "The provided text does not contain all the necessary information to extract the requested data in JSON format. The provided text only contains the following information:\n\n```json\n{\n  \"Full Name\": \"Anne Mckinney\",\n  \"Email address\": \"hruiz@example.org\",\n  \"Phone number\": \"6993947729\",\n}\n```"
+    },
+    {
+        "Christopher Rich_CV.docx": "The provided text does not contain the requested information, such as LinkedIn profile, GitHub profile, certifications, skills, projects, etc. Therefore, I cannot extract the data in JSON format."
+    },
+    {
+        "cv.docx": "```json\n{\n  \"Full Name\": \"John Doe\",\n  \"Email address\": \"john.doe@example.com\",\n  \"Phone number\": \"(123) 456-7890\",\n  \"LinkedIn profile\": \"linkedin.com/in/johndoe\",\n  \"GitHub profile\": \"github.com/johndoe\",\n  \"Education\": [\n    {\n      \"Degree\": \"Master of Science in Computer Science\",\n      \"Institution\": \"University of Technology\",\n      \"Year\": 2015\n    },\n    {\n      \"Degree\": \"Bachelor of Science in Software Engineering\",\n      \"Institution\": \"University of Technology\",\n      \"Year\": 2013\n    }\n  ],\n  \"Certifications\": [\n    \"Certified Kubernetes Administrator (CKA)\",\n    \"AWS Certified Solutions Architect\"\n  ],\n  \"Skills\": {\n    \"Technical Skills\": [\n      \"Python\",\n      \"Java\",\n      \"C++\",\n      \"AWS\",\n      \"Azure\",\n      \"Google Cloud\",\n      \"TensorFlow\",\n      \"PyTorch\",\n      \"Keras\",\n      \"Docker\",\n      \"Kubernetes\",\n      \"Jenkins\"\n    ]\n  },\n  \"Projects\": [\n    {\n      \"Name\": \"AI-Based Document Analyzer\",\n      \"Description\": \"Developed a machine learning model to analyze and extract key data from resumes.\"\n    },\n    {\n      \"Name\": \"Cloud-Based File Storage System\",\n      \"Description\": \"Designed and implemented a scalable cloud storage solution using AWS S3.\"\n    }\n  ],\n  \"Languages\": {\n    \"English\": \"Fluent\",\n    \"Spanish\": \"Intermediate\"\n  }\n}\n```"
+    },
+    {
+        "cv.txt": "```json\n{\n  \"FullName\": \"John Doe\",\n  \"EmailAddress\": \"john.doe@example.com\",\n  \"PhoneNumber\": \"(123) 456-7890\",\n  \"LinkedInProfile\": \"linkedin.com/in/johndoe\",\n  \"GitHubProfile\": \"github.com/johndoe\",\n  \"Education\": [\n    {\n      \"Degree\": \"Master of Science in Computer Science\",\n      \"Institution\": \"University of Technology\",\n      \"Year\": 2015\n    },\n    {\n      \"Degree\": \"Bachelor of Science in Software Engineering\",\n      \"Institution\": \"University of Technology\",\n      \"Year\": 2013\n    }\n  ],\n  \"Certifications\": [\n    \"Certified Kubernetes Administrator (CKA)\",\n    \"AWS Certified Solutions Architect\"\n  ],\n  \"Skills\": {\n    \"TechnicalSkills\": [\n      \"Python\",\n      \"Java\",\n      \"C++\",\n      \"AWS\",\n      \"Azure\",\n      \"Google Cloud\",\n      \"TensorFlow\",\n      \"PyTorch\",\n      \"Keras\",\n      \"Docker\",\n      \"Kubernetes\",\n      \"Jenkins\"\n    ],\n    \"ProgrammingLanguages\": [\n      \"Python\",\n      \"Java\",\n      \"C++\"\n    ],\n    \"Tools\": [\n      \"Docker\",\n      \"Kubernetes\",\n      \"Jenkins\"\n    ]\n  },\n  \"Projects\": [\n    {\n      \"Name\": \"AI-Based Document Analyzer\",\n      \"Description\": \"Developed a machine learning model to analyze and extract key data from resumes.\"\n    },\n    {\n      \"Name\": \"Cloud-Based File Storage System\",\n      \"Description\": \"Designed and implemented a scalable cloud storage solution using AWS S3.\"\n    }\n  ],\n  \"Languages\": [\n    {\n      \"Language\": \"English\",\n      \"Proficiency\": \"Fluent\"\n    },\n    {\n      \"Language\": \"Spanish\",\n      \"Proficiency\": \"Intermediate\"\n    }\n  ]\n}\n```"
+    },
+    {
+        "David Drake_CV.docx": "The provided text is incomplete, so I cannot extract the requested information."
+    },
+    {
+        "Elizabeth Jefferson_CV.docx": "The provided text does not contain the information requested. The provided information only includes the name, email, and phone number. The requested information below is not obtainable from the text provided.\n\n```json\n{\n  \"Full Name\": \"Elizabeth Jefferson\",\n  \"Email address\": \"hruiz@example.net\",\n  \"Phone number\": \"433-312-5112x8040\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": \"Administrator, Civil Service\",\n  \"Certifications\": null,\n  \"Skills\": null,\n  \"Projects\": null\n}\n```"
+    },
+    {
+        "Erin Macias_CV.docx": "The provided text does not contain all the information requested. Here is the information that can be extracted from the provided text:\n\n```json\n{\n  \"Full Name\": \"Erin Macias\",\n  \"Email address\": \"austinsmith@example.net\",\n  \"Phone number\": \"001-552-462-7923x96000\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": [\n    {\n      \"degree\": \"Health physicist\",\n      \"institution\": null\n    }\n  ],\n  \"Certifications\": [],\n  \"Skills\": [],\n  \"Projects\": []\n}\n```"
+    },
+    {
+        "Francisco Flores_CV.docx": "The provided text does not contain all the information requested. Here is the extracted information in JSON format based on the provided text:\n\n```json\n{\n  \"Full Name\": \"Francisco Flores\",\n  \"Email address\": \"julia55@example.net\",\n  \"Phone number\": \"(433)480-2737x890\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": [\n    \"Museum/gallery exhibitions officer\"\n  ],\n  \"Certifications\": [],\n  \"Skills\": [],\n  \"Projects\": []\n}\n```"
+    },
+    {
+        "Jason Holt_CV.docx": "The provided CV text does not contain all the requested information, so I can only extract the following:\n\n```json\n{\n  \"Full Name\": \"Jason Holt\",\n  \"Email address\": \"pamela28@example.net\",\n  \"Phone number\": \"(451)231-4391\",\n  \"LinkedIn profile\": \"Not provided\",\n  \"GitHub profile\": \"Not provided\",\n  \"Education\": \"Community development worker\",\n  \"Certifications\": \"Not provided\",\n  \"Skills\": \n    {\n\"Technical skills\": \"Not provided\",\n\"Programming languages\": \"Not provided\",\n\"Tools\": \"Not provided\"\n    },\n  \"Projects\": \"Not provided\"\n}\n```"
+    },
+    {
+        "Jason Hunter_CV.docx": "The provided text only contains the name and email address from the CV. The rest of the information is missing, so I cannot extract the requested data in JSON format."
+    },
+    {
+        "Jason Walsh_CV.docx": "The provided text does not contain all the requested information, so the JSON output will only include the available data.\n\n```JSON\n{\n  \"Full Name\": \"Jason Walsh\",\n  \"Email address\": \"brianwallace@example.net\",\n  \"Phone number\": \"(378)359-4764x501\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": \"Psychiatrist\",\n  \"Certifications\": null,\n  \"Skills\": null,\n  \"Projects\": null\n}\n```"
+    },
+    {
+        "Joshua Saunders_CV.docx": "The provided text does not contain the requested information except for the following:\n\n```json\n{\n    \"Full Name\": \"Joshua Saunders\",\n    \"Email Address\": \"colemanryan@example.com\",\n    \"Phone Number\": \"+1-377-275-6547x6219\"\n}\n```"
+    },
+    {
+        "Lisa Garcia_CV.docx": "The provided CV text is incomplete, so I cannot extract the requested information."
+    },
+    {
+        "Lydia Rhodes_CV.docx": "The provided context does not contain all the information requested in the prompt. Here is the extracted information in JSON format based on the available data:\n\n```\n{\n  \"Full Name\": \"Lydia Rhodes\",\n  \"Email address\": \"ashley93@example.org\",\n  \"Phone number\": \"634-770-8291x431\",\n  \"LinkedIn profile\": \"N/A\",\n  \"GitHub profile\": \"N/A\",\n  \"Education\": {\n    \"degrees\": [\"Agricultural engineer\"],\n    \"institutions\": [\"N/A\"]\n  },\n  \"Certifications\": \"N/A\",\n  \"Skills\": {\n    \"technical skills\": \"N/A\",\n    \"programming languages\": \"N/A\",\n    \"tools\": \"N/A\"\n  },\n  \"Projects\": \"N/A\"\n}\n```"
+    },
+    {
+        "Mary Stanton_CV.docx": "The provided information does not contain the requested details, such as LinkedIn profile, GitHub profile, certifications, skills, projects, or educational institution details. Therefore, I cannot extract the requested data in JSON format."
+    },
+    {
+        "Michelle Martinez_CV.docx": "The provided text does not have the information requested."
+    },
+    {
+        "Nathaniel Malone_CV.docx": "```json\n{\n  \"Full Name\": \"Nathaniel Malone\",\n  \"Email address\": \"scott85@example.org\",\n  \"Phone number\": \"346.330.8273x6480\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": [\n    {\n      \"degree\": \"Chemist\",\n      \"institution\": \"analytical\"\n    }\n  ],\n  \"Certifications\": [],\n  \"Skills\": [],\n  \"Projects\": []\n}\n```"
+    },
+    {
+        "Nicole Curry_CV.docx": "The provided text does not include all the requested information. Therefore, I cannot extract the full JSON object.\n\n```json\n{\n  \"Full Name\": \"Nicole Curry\",\n  \"Email address\": \"fostermark@example.com\",\n  \"Phone number\": \"643-655-4844\"\n}\n```"
+    },
+    {
+        "Robert Humphrey_CV.docx": "The provided text is incomplete and doesn't provide enough information to extract the requested data."
+    },
+    {
+        "Tara Martin_CV.docx": "The provided text doesn't contain all the information requested. Here's the information that can be extracted from the given text:\n\n```json\n{\n  \"Full Name\": \"Tara Martin\",\n  \"Email address\": \"pageleslie@example.net\",\n  \"Phone number\": \"226-525-1583x7532\",\n  \"LinkedIn profile\": \"Not provided\",\n  \"GitHub profile\": \"Not provided\",\n  \"Education\": \"Therapist, nutritional\",\n  \"Certifications\": \"Not provided\",\n  \"Skills\": \"Not provided\",\n  \"Projects\": \"Not provided\"\n}\n```"
+    },
+    {
+        "Valerie Simmons_CV.docx": "The provided text does not include all the requested information, so I cannot extract the data in JSON format."
+    },
+    {
+        "Zachary Richardson_CV.docx": "The provided text does not contain all the requested information. Here's what could be extracted from the text:\n\n```json\n{\n  \"Full Name\": \"Zachary Richardson\",\n  \"Email address\": \"ocook@example.com\",\n  \"Phone number\": \"+1-536-385-2509\",\n  \"LinkedIn profile\": null,\n  \"GitHub profile\": null,\n  \"Education\": [\n    {\n      \"degree\": \"Engineer\",\n      \"institution\": \"electronics\"\n    }\n  ],\n  \"Certifications\": [],\n  \"Skills\": [],\n  \"Projects\": []\n}\n```"
+    }
+]

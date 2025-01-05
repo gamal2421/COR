@@ -1,0 +1,100 @@
+[
+    {
+        "Hamza_Mounir_CV.pdf": {
+            "emails": [
+                "7amzahamza8@gmail.com"
+            ],
+            "phones": [
+                "0127006792"
+            ],
+            "linkedin": [
+                "linkedin.com/in/hamza"
+            ],
+            "github": [
+                "github.com/7amzahamza8"
+            ],
+            "education": [],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [
+                [
+                    "Projects",
+                    "Native (Mother Tongue) English: Basic proficiency "
+                ]
+            ],
+            "languages": [],
+            "names": [
+                "Java",
+                "Java Database Management:",
+                "Problem Solvi",
+                "Hamza Mohammed Mounir El -Marghany Phone"
+            ],
+            "locations": [
+                "Flutter"
+            ],
+            "dates": [
+                "2026"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    },
+    {
+        "John_Doe_CV.docx": {
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Graduated",
+                "Master",
+                "Bachelor"
+            ],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [],
+            "languages": [],
+            "names": [
+                "Docker",
+                "IBM Watson - Database",
+                "Spring Boot",
+                "IBM Cloud",
+                "C++",
+                "macOS - Soft Skills",
+                "JavaScript - Cloud Technologies",
+                "Cassandra",
+                "IBM Watson",
+                "John Doe Email",
+                "Austin Graduated"
+            ],
+            "locations": [
+                "Berkeley Graduated",
+                "Jenkins",
+                "San Francisco",
+                "React",
+                "San Jose",
+                "AI"
+            ],
+            "dates": [
+                "May 2020 - Worked",
+                "2017",
+                "5+ years",
+                "June 2020",
+                "May 2017",
+                "daily"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    }
+]

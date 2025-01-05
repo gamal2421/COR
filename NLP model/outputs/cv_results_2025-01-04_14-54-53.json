@@ -1,0 +1,100 @@
+[
+    {
+        "Hamza_Mounir_CV.pdf": {
+            "emails": [
+                "7amzahamza8@gmail.com"
+            ],
+            "phones": [
+                "0127006792"
+            ],
+            "linkedin": [
+                "linkedin.com/in/hamza"
+            ],
+            "github": [
+                "github.com/7amzahamza8"
+            ],
+            "education": [],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [
+                [
+                    "Projects",
+                    "Native (Mother Tongue) English: Basic proficiency "
+                ]
+            ],
+            "languages": [],
+            "names": [
+                "Problem Solvi",
+                "Java",
+                "Hamza Mohammed Mounir El -Marghany Phone",
+                "Java Database Management:"
+            ],
+            "locations": [
+                "Flutter"
+            ],
+            "dates": [
+                "2026"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    },
+    {
+        "John_Doe_CV.docx": {
+            "emails": [
+                "johndoe@email.com"
+            ],
+            "phones": [
+                "234-567-8901"
+            ],
+            "linkedin": [
+                "linkedin.com/in/johndoe"
+            ],
+            "github": [
+                "github.com/johndoe"
+            ],
+            "education": [
+                "Master",
+                "Graduated",
+                "Bachelor"
+            ],
+            "certifications": [],
+            "technical_skills": [],
+            "projects": [],
+            "languages": [],
+            "names": [
+                "Cassandra",
+                "C++",
+                "Austin Graduated",
+                "Docker",
+                "John Doe Email",
+                "macOS - Soft Skills",
+                "JavaScript - Cloud Technologies",
+                "IBM Cloud",
+                "Spring Boot",
+                "IBM Watson - Database",
+                "IBM Watson"
+            ],
+            "locations": [
+                "AI",
+                "Berkeley Graduated",
+                "San Francisco",
+                "Jenkins",
+                "San Jose",
+                "React"
+            ],
+            "dates": [
+                "June 2020",
+                "daily",
+                "5+ years",
+                "May 2017",
+                "2017",
+                "May 2020 - Worked"
+            ],
+            "skills": [],
+            "jobs": [],
+            "organizations": []
+        }
+    }
+]
