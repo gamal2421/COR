@@ -1,0 +1,28 @@
+Michael Johnson
+Email: michael.johnson@example.com
+Phone: (333) 654-7891
+LinkedIn: linkedin.com/in/michaeljohnson
+GitHub: github.com/michaeljohnson
+
+Education:
+
+Master of Science in Data Science, Data Institute, 2020
+Bachelor of Science in Statistics, Data Institute, 2018
+Certifications:
+
+Tableau Desktop Specialist
+Certified Data Scientist (CDS)
+Technical Skills:
+
+Programming Languages: Python, SQL, Scala
+Data Analysis Tools: Pandas, NumPy, Matplotlib
+Data Visualization: Tableau, Power BI
+Big Data Tools: Apache Spark, Hive
+Projects:
+
+Sales Forecasting Model: Created a predictive model to forecast sales trends for retail businesses.
+Interactive Dashboard: Designed a Tableau dashboard for real-time KPI tracking.
+Languages:
+
+English: Fluent
+Spanish: Beginner
