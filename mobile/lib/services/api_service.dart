@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 
 import '../common/network/exceptions/api_exceptions.dart';
 
-const String baseUrl = 'http://192.168.1.10:3000';
+const String baseUrl = 'http://localhost:3000';
 
 class ApiService {
   Future<String> courseRecommendation({

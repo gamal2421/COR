@@ -4,39 +4,61 @@ class CVDetails {
   final String level;
   final String role;
   final String skillset;
+  final List<String> additionalDetails;
 
   CVDetails({
     required this.level,
     required this.role,
     required this.skillset,
+    this.additionalDetails = const [],
   });
 
   factory CVDetails.fromString(String details) {
-
-    // Remove any surrounding quotes
+    // إزالة أي علامات اقتباس حول السلسلة
     details = details.replaceAll(RegExp(r'^"|"$'), '');
 
     log('details>>>>>>: $details');
-    // Split the string by the escaped newline character
+    // تقسيم السلسلة حسب الفواصل
     List<String> processedDetails = details.split('\\n');
 
-    // Ensure we have at least 3 details
-    if (processedDetails.length < 3) {
-      throw ArgumentError('Insufficient CV details. Received: ${processedDetails.length} details');
+    // تحديد التفاصيل الأساسية
+    String level = '';
+    String role = '';
+    String skillset = '';
+    List<String> additionalDetails = [];
+
+    // معالجة التفاصيل حسب التنسيق
+    for (var detail in processedDetails) {
+      if (detail.startsWith('Level:')) {
+        level = _extractValue(detail, 'Level:');
+      } else if (detail.startsWith('Developer Role:')) {
+        role = _extractValue(detail, 'Developer Role:');
+      } else if (detail.startsWith('Skillset:')) {
+        skillset = _extractValue(detail, 'Skillset:');
+      } else {
+        additionalDetails.add(detail.trim()); // إضافة التفاصيل الإضافية
+      }
+    }
+
+    // التحقق من وجود تفاصيل أساسية
+    if (level.isEmpty || role.isEmpty || skillset.isEmpty) {
+      throw ArgumentError('Missing required CV details');
     }
 
     return CVDetails(
-      level: _extractValue(processedDetails[0], 'Level:'),
-      role: _extractValue(processedDetails[1], 'Developer Role:'),
-      skillset: _extractValue(processedDetails[2], 'Skillset:'),
+      level: level,
+      role: role,
+      skillset: skillset,
+      additionalDetails: additionalDetails,
     );
   }
+
   static String _extractValue(String detail, String label) {
     return detail.substring(detail.indexOf(label) + label.length).trim();
   }
 
   @override
   String toString() {
-    return 'CVDetails(level: $level, role: $role, skillset: $skillset)';
+    return 'CVDetails(level: $level, role: $role, skillset: $skillset, additionalDetails: $additionalDetails)';
   }
 }
