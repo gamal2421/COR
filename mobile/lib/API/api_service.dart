@@ -6,7 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
 import 'api_exceptions.dart';  // تأكد من أنك أضفت الاستيراد الصحيح
 
-const String baseUrl = 'http://localhost:5000'; // Flask API URL
+const String baseUrl = 'http://127.0.0.1:5000'; // Flask API URL
 
 class ApiService {
   /// Method to upload a file to the Flask server.
