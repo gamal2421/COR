@@ -8,7 +8,7 @@ class FileUploadInitial extends FileUploadState {}
 class FileUploadLoading extends FileUploadState {}
 
 class FileUploadSuccess extends FileUploadState {
-  final String response;
+  final Map<String, dynamic> response;
 
   FileUploadSuccess(this.response);
 }

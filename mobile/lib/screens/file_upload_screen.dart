@@ -1,10 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:frontend/services/file_upload_cubit.dart';
-
 
 class FileUploadScreen extends StatelessWidget {
   @override
@@ -33,7 +33,7 @@ class FileUploadScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Text(
-                  state.response,
+                  jsonEncode(state.response),  // تحويل الـ Map إلى String
                   style: TextStyle(fontSize: 16),
                 ),
               ),
