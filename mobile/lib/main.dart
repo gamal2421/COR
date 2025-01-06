@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/services/file_upload_cubit.dart';
+import 'API/api_service.dart';
+import './screens/file_upload_screen.dart';
 
-import 'app.dart';
-import 'common/injector_module.dart';
-import 'common/widgets/global_bloc_provider.dart';
-import 'common/widgets/repository_holder.dart';
+void main() {
+  runApp(MyApp());
+}
 
-Future<void> main() async {
-  await InjectorModule.inject();
-
-  runApp(
-    const GlobalBlocProvider(
-      child: RepositoriesHolder(
-        child: Application(),
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => FileUploadCubit(ApiService()),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: FileUploadScreen(),
       ),
-    ),
-  );
+    );
+  }
 }
