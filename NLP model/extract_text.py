@@ -107,7 +107,6 @@ def process_cv_folder(folder_path):
             cleaned_text = clean_text(raw_text)
             extracted_info = ask_ai_to_extract_info(cleaned_text)
 
-            # Try parsing the returned info as JSON
             try:
                 extracted_info_json = json.loads(extracted_info)
                 results.append({filename: extracted_info_json})
@@ -123,12 +122,12 @@ def save_results_to_json(results, output_dir):
     current_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_file = os.path.join(output_dir, f"cv_results_{current_date}.json")
     with open(output_file, "w", encoding="utf-8") as file:
-        json.dump(results, file, indent=4, ensure_ascii=False)  # Save formatted JSON
+        json.dump(results, file, indent=4, ensure_ascii=False) 
     logger.info(f"Results saved to {output_file}")
 
 if __name__ == "__main__":
-    folder_path = r"NLP model\data"  # Replace with your folder path
-    output_dir = r"NLP model\outputs"  # Replace with your output directory
+    folder_path = r"NLP model\data"  
+    output_dir = r"NLP model\outputs"  
     if not os.path.exists(folder_path):
         logger.error(f"Folder {folder_path} not found.")
     else:
