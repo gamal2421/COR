@@ -7,11 +7,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:frontend/services/file_upload_cubit.dart';
 
 class FileUploadScreen extends StatelessWidget {
+  const FileUploadScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload and Analyze File'),
+        title: const Text('Upload and Analyze File'),
       ),
       body: BlocConsumer<FileUploadCubit, FileUploadState>(
         listener: (context, state) {
@@ -21,20 +23,20 @@ class FileUploadScreen extends StatelessWidget {
             );
           } else if (state is FileUploadSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('File uploaded successfully!')),
+              const SnackBar(content: Text('File uploaded successfully!')),
             );
           }
         },
         builder: (context, state) {
           if (state is FileUploadLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is FileUploadSuccess) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Text(
                   jsonEncode(state.response),  // تحويل الـ Map إلى String
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             );
@@ -51,7 +53,7 @@ class FileUploadScreen extends StatelessWidget {
                   context.read<FileUploadCubit>().uploadFile(file);
                 }
               },
-              child: Text('Select and Upload File'),
+              child: const Text('Select and Upload File'),
             ),
           );
         },
