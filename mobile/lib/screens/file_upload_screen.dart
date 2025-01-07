@@ -31,13 +31,12 @@ class FileUploadScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is FileUploadSuccess) {
             try {
-              // تحويل الـ response (التي هي Map) إلى String باستخدام jsonEncode
               final response = state.response;
 
               // استخدم الـ response مباشرة لتحويله إلى نص عادي
               String displayText = '';
 
-              // مثال على كيفية تحويل الـ response إلى نص واضح
+              // عرض الحقول المختلفة
               if (response.containsKey('Full Name')) {
                 displayText += 'Full Name: ${response['Full Name']}\n';
               }
@@ -59,7 +58,7 @@ class FileUploadScreen extends StatelessWidget {
                 }
               }
 
-              // إضافة باقي البيانات بناءً على الـ response
+              // عرض الشهادات
               if (response.containsKey('Certifications')) {
                 displayText += 'Certifications:\n';
                 final certifications = response['Certifications'];
@@ -70,13 +69,24 @@ class FileUploadScreen extends StatelessWidget {
                 }
               }
 
-              // عرض باقي البيانات بالطريقة نفسها
+              // عرض المشاريع
               if (response.containsKey('Projects')) {
                 displayText += 'Projects:\n';
                 final projects = response['Projects'];
                 if (projects is List) {
                   for (var project in projects) {
                     displayText += '  - $project\n';
+                  }
+                }
+              }
+
+              // عرض المهارات
+              if (response.containsKey('Skills')) {
+                displayText += 'Skills:\n';
+                final skills = response['Skills'];
+                if (skills is List) {
+                  for (var skill in skills) {
+                    displayText += '  - $skill\n';
                   }
                 }
               }
