@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,18 +32,64 @@ class FileUploadScreen extends StatelessWidget {
           } else if (state is FileUploadSuccess) {
             try {
               // تحويل الـ response (التي هي Map) إلى String باستخدام jsonEncode
-              final String jsonResponse = jsonEncode(state.response);
-              
-              return ListView.builder(
+              final response = state.response;
+
+              // استخدم الـ response مباشرة لتحويله إلى نص عادي
+              String displayText = '';
+
+              // مثال على كيفية تحويل الـ response إلى نص واضح
+              if (response.containsKey('Full Name')) {
+                displayText += 'Full Name: ${response['Full Name']}\n';
+              }
+              if (response.containsKey('Email address')) {
+                displayText += 'Email: ${response['Email address']}\n';
+              }
+              if (response.containsKey('Phone number')) {
+                displayText += 'Phone: ${response['Phone number']}\n';
+              }
+              if (response.containsKey('Education')) {
+                displayText += 'Education:\n';
+                final education = response['Education'];
+                if (education is List) {
+                  for (var edu in education) {
+                    if (edu is Map) {
+                      displayText += '  - ${edu['degree']} at ${edu['institution']}\n';
+                    }
+                  }
+                }
+              }
+
+              // إضافة باقي البيانات بناءً على الـ response
+              if (response.containsKey('Certifications')) {
+                displayText += 'Certifications:\n';
+                final certifications = response['Certifications'];
+                if (certifications is List) {
+                  for (var cert in certifications) {
+                    displayText += '  - $cert\n';
+                  }
+                }
+              }
+
+              // عرض باقي البيانات بالطريقة نفسها
+              if (response.containsKey('Projects')) {
+                displayText += 'Projects:\n';
+                final projects = response['Projects'];
+                if (projects is List) {
+                  for (var project in projects) {
+                    displayText += '  - $project\n';
+                  }
+                }
+              }
+
+              return ListView(
                 padding: const EdgeInsets.all(16.0),
-                itemCount: 1, // التعداد واحد هنا لأنه سيكون لديك استجابة واحدة
-                itemBuilder: (context, index) {
-                  return Card(
+                children: [
+                  Card(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     child: ListTile(
                       title: const Text("File Data", style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(
-                        jsonResponse, // عرض البيانات بتنسيق JSON
+                        displayText, // عرض البيانات العادية
                         maxLines: 5,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -56,7 +101,7 @@ class FileUploadScreen extends StatelessWidget {
                             title: const Text("File Data"),
                             content: SingleChildScrollView(
                               child: Text(
-                                jsonResponse,
+                                displayText,
                                 style: const TextStyle(fontSize: 14),
                               ),
                             ),
@@ -70,8 +115,8 @@ class FileUploadScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             } catch (e) {
               return Center(
