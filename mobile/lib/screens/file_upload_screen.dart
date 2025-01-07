@@ -31,15 +31,56 @@ class FileUploadScreen extends StatelessWidget {
           if (state is FileUploadLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is FileUploadSuccess) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
+            try {
+              // تحويل الـ response (التي هي Map) إلى String باستخدام jsonEncode
+              final String jsonResponse = jsonEncode(state.response);
+              
+              return ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: 1, // التعداد واحد هنا لأنه سيكون لديك استجابة واحدة
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      title: const Text("File Data", style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(
+                        jsonResponse, // عرض البيانات بتنسيق JSON
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () {
+                        // عرض التفاصيل الكاملة عند الضغط
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("File Data"),
+                            content: SingleChildScrollView(
+                              child: Text(
+                                jsonResponse,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('Close'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            } catch (e) {
+              return Center(
                 child: Text(
-                  jsonEncode(state.response),  // تحويل الـ Map إلى String
-                  style: const TextStyle(fontSize: 16),
+                  'Error parsing data: ${e.toString()}',
+                  style: const TextStyle(color: Colors.red),
                 ),
-              ),
-            );
+              );
+            }
           }
           return Center(
             child: ElevatedButton(
