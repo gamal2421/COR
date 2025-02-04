@@ -1,0 +1,27 @@
+Jane Doe
+Email: jane.doe@example.com
+Phone: (444) 987-6543
+LinkedIn: linkedin.com/in/janedoe
+GitHub: github.com/janedoe
+
+Education:
+
+Bachelor of Science in Software Engineering, Global University, 2017
+Certifications:
+
+Certified Java Developer (OCP)
+Google Cloud Professional Cloud Architect
+Technical Skills:
+
+Programming Languages: Java, JavaScript, Python
+Frameworks: Spring Boot, Angular, React
+Databases: MySQL, PostgreSQL, MongoDB
+DevOps Tools: Docker, Kubernetes, Jenkins
+Projects:
+
+E-commerce Platform: Designed and developed a scalable e-commerce platform with a microservices architecture.
+Real-Time Notification System: Implemented a real-time notification system using WebSockets.
+Languages:
+
+English: Fluent
+German: Intermediate

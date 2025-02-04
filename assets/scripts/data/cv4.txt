@@ -1,0 +1,26 @@
+Emily Brown
+Email: emily.brown@example.com
+Phone: (222) 123-9876
+LinkedIn: linkedin.com/in/emilybrown
+GitHub: github.com/emilybrown
+
+Education:
+
+Bachelor of Science in Cybersecurity, Security Academy, 2019
+Certifications:
+
+Certified Ethical Hacker (CEH)
+CISSP (Certified Information Systems Security Professional)
+Technical Skills:
+
+Cybersecurity Tools: Wireshark, Metasploit, Burp Suite
+Programming Languages: Python, PowerShell, Bash
+Cloud Security: AWS Security Hub, Azure Security Center
+Projects:
+
+Vulnerability Scanner: Developed a Python tool to identify vulnerabilities in web applications.
+Incident Response Framework: Built an automated incident response system for enterprise networks.
+Languages:
+
+English: Fluent
+Italian: Intermediate
