@@ -1,4 +1,4 @@
-# Install script for directory: C:/cv_1.0/windows/runner
+# Install script for directory: E:/COR-1/app/windows/runner
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

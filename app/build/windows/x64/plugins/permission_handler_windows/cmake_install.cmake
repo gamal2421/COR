@@ -1,4 +1,4 @@
-# Install script for directory: C:/cv_1.0/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/windows
+# Install script for directory: E:/COR-1/app/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/windows
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

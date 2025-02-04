@@ -2,22 +2,22 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\flutter\x64\Debug\flutter_assemble</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\flutter\x64\Debug\flutter_assemble</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\plugins\permission_handler_windows\Debug\permission_handler_windows_plugin.dll</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\plugins\permission_handler_windows\Debug\permission_handler_windows_plugin.dll</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\runner\Debug\untitled.exe</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\runner\Debug\untitled.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\x64\Debug\ALL_BUILD</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\x64\Debug\ALL_BUILD</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\cv_1.0\build\windows\x64\x64\Debug\INSTALL</FullPath>
+      <FullPath>E:\COR-1\app\build\windows\x64\x64\Debug\INSTALL</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

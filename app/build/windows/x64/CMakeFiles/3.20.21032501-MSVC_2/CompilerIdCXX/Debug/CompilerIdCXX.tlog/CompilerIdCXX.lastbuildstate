@@ -1,2 +1,2 @@
-PlatformToolSet=v142:VCToolArchitecture=Native64Bit:VCToolsVersion=14.29.30133:TargetPlatformVersion=10.0.19041.0:
-Debug|x64|C:\cv_1.0\build\windows\x64\CMakeFiles\3.20.21032501-MSVC_2\CompilerIdCXX\|
+PlatformToolSet=v142:VCToolArchitecture=Native64Bit:VCToolsVersion=14.29.30133:TargetPlatformVersion=10.0.19041.0:VcpkgTriplet=x64-windows:
+Debug|x64|E:\COR-1\app\build\windows\x64\CMakeFiles\3.20.21032501-MSVC_2\CompilerIdCXX\|

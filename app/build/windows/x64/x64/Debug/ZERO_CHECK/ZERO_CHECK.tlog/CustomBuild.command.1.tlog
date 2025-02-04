@@ -1,6 +1,6 @@
-^C:\CV_1.0\BUILD\WINDOWS\X64\CMAKEFILES\3BC433A7D17894CD5215BFCCAD52E7BC\GENERATE.STAMP.RULE
+^E:\COR-1\APP\BUILD\WINDOWS\X64\CMAKEFILES\03EC1FB76BE20DCBD931D5414B0BB88D\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/cv_1.0/windows -BC:/cv_1.0/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/cv_1.0/build/windows/x64/untitled.sln
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SE:/COR-1/app/windows -BE:/COR-1/app/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/COR-1/app/build/windows/x64/untitled.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
