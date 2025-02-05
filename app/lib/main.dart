@@ -32,6 +32,9 @@ class FireStoreHome extends StatefulWidget {
   _FireStoreHomeState createState() => _FireStoreHomeState();
 }
 
+
+
+
 class _FireStoreHomeState extends State<FireStoreHome> {
   CollectionReference cvCollection = Firestore.instance.collection('CV');
   List<Map<String, dynamic>> allCVs = [];
@@ -485,6 +488,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       ),
     );
   }
+
 
   void _navigateToDetail(Map<String, dynamic> cv) {
     Navigator.push(
