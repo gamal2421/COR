@@ -1,5 +1,9 @@
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:process_run/process_run.dart';
+import 'dart:convert';
 import 'CVDetailedPage.dart';
 const projectId = 'ocrcv-1e6fe';
 
@@ -10,7 +14,6 @@ void main() async {
 
 class FireStoreApp extends StatelessWidget {
   const FireStoreApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,9 +35,6 @@ class FireStoreHome extends StatefulWidget {
   _FireStoreHomeState createState() => _FireStoreHomeState();
 }
 
-
-
-
 class _FireStoreHomeState extends State<FireStoreHome> {
   CollectionReference cvCollection = Firestore.instance.collection('CV');
   List<Map<String, dynamic>> allCVs = [];
@@ -46,7 +46,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   // Filter checkboxes (independent of each other)
   bool isSkillsChecked = false;
-  // Removed isProgrammingLanguageChecked, isGraduationYearChecked, and isInstitutionChecked
   bool isCertificationChecked = false;
   bool isEducationChecked = false; // New checkbox for Education
   bool isLanguageChecked = false;
@@ -118,8 +117,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     );
   }
 
-  /// Returns a list of fields to filter by based on the active checkboxes.
-  /// If no filter checkbox is active, we default to filtering by "Full Name."
   List<String> _getActiveFilterFields() {
     List<String> activeFields = [];
     if (isSkillsChecked) activeFields.add('Skills');
@@ -130,11 +127,8 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     return activeFields;
   }
 
-  /// Applies the filters based on the selected checkboxes and search query.
-  /// Only CVs that have a non-empty value for each selected attribute will be shown.
   void _applyFilters() {
     List<Map<String, dynamic>> filtered = allCVs.where((cv) {
-      // Check for Education if that filter is active.
       if (isEducationChecked &&
           (cv['Education'] == null ||
               cv['Education'].toString().trim().isEmpty)) {
@@ -154,9 +148,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
               cv['Languages'].toString().trim().isEmpty)) {
         return false;
       }
-
-      // If a search query is provided, then check that at least one of the active fields
-      // contains the search query.
       if (searchQuery.isNotEmpty) {
         List<String> fields = _getActiveFilterFields();
         bool matches = fields.any((field) {
@@ -170,15 +161,79 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
     setState(() {
       _currentPage = 0;
-      // For simplicity, we take only the first page of results.
       displayedCVs = filtered.take(_itemsPerPage).toList();
     });
   }
 
+  /// ---------------
+  /// File Processing
+  /// ---------------
+
+  /// Picks a file (or files) then runs the Python script for each.
+  Future<void> pickAndProcessFile() async {
+    // Request storage permission
+    final status = await Permission.storage.request();
+    if (!status.isGranted) {
+      _showSnackbar("⚠ Permission denied!", Colors.orange);
+      return;
+    }
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'docx', 'txt'],
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      String filePath = result.files.first.path!;
+      await runPythonScript(filePath);
+    }
+  }
+
+  /// Runs the Python script to process the file and upload data to Firestore.
+  Future<void> runPythonScript(String filePath) async {
+    setState(() => isLoading = true);
+
+    try {
+      // Set the Python executable (adjust if needed for your environment)
+      final pythonPath = 'python'; // Or 'python3'
+      // Path to your Python script (ensure this is correct)
+      final scriptPath = 'assets/scripts/extract_text.py';
+      
+      // Run the Python script with the file path as an argument
+      final result = await runExecutableArguments(
+        pythonPath,
+        [scriptPath, filePath],
+      );
+
+      if (result.exitCode == 0) {
+        final jsonData = jsonDecode(result.stdout.trim());
+        await uploadDataToFirestore(jsonData);
+      } else {
+        _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
+      }
+    } catch (e) {
+      _showSnackbar("❌ Error: $e", Colors.red);
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> uploadDataToFirestore(Map<String, dynamic> data) async {
+    try {
+      final document = await cvCollection.add(data);
+      _showSnackbar("✅ Data uploaded: ${document.id}", Colors.green);
+    } catch (e) {
+      _showSnackbar("❌ Error uploading data: $e", Colors.red);
+    }
+  }
+
+  /// ---------------
+  /// End File Processing
+  /// ---------------
+
   @override
   Widget build(BuildContext context) {
-    
-    // Get screen width and height
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -195,20 +250,17 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         children: [
           Row(
             children: [
-              // Sidebar filters on the left side taking full height
               _buildSidebarFilters(screenHeight),
-              // Main content area for search bar and CV grid
               Expanded(
                 child: Column(
                   children: [
-                    _buildSearchBar(screenWidth), // Search bar on the top-right
-                    Expanded(child: _buildCVGrid()), // CV grid below the search bar
+                    _buildSearchBar(screenWidth),
+                    Expanded(child: _buildCVGrid()),
                   ],
                 ),
               ),
             ],
           ),
-          // Bottom bar remains unchanged.
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -219,9 +271,9 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                 children: [
                   const SizedBox(width: 30),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(10), // Adjust as needed
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      'assets/img/sclog.jpg',
+                      'images/ntgschool.png',
                       width: 80,
                       height: 50,
                       fit: BoxFit.cover,
@@ -246,7 +298,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                       fontSize: 12,
                     ),
                   ),
-                  const SizedBox(width: 480),
+                  const Spacer(),
                   const Text(
                     'V 0.1.1',
                     textAlign: TextAlign.left,
@@ -261,8 +313,9 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           ),
         ],
       ),
+      // Use the floating action button to initiate file picking and processing.
       floatingActionButton: FloatingActionButton(
-        onPressed: getData,
+        onPressed: isLoading ? null : () async => await pickAndProcessFile(),
         backgroundColor: Colors.red[800],
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -300,7 +353,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   Widget _buildSidebarFilters(double screenHeight) {
     return Container(
       width: 250,
-      height: screenHeight, // Full height sidebar
+      height: screenHeight,
       color: Colors.grey[100],
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -310,7 +363,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
-          // Skills Checkbox
           Row(
             children: [
               const Text(
@@ -335,7 +387,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             ],
           ),
           const Divider(),
-          // Certifications Checkbox
           Row(
             children: [
               const Text(
@@ -360,7 +411,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             ],
           ),
           const Divider(),
-          // Education Checkbox
           Row(
             children: [
               const Text(
@@ -385,7 +435,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             ],
           ),
           const Divider(),
-          // Languages Checkbox
           Row(
             children: [
               const Text(
@@ -415,19 +464,18 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   }
 
   Widget _buildCVGrid() {
-    // If still loading, show the red circular progress indicator.
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: Colors.red),
       );
     }
 
-    // If no CVs are available after filtering, show a "No data found" message.
     if (displayedCVs.isEmpty) {
       return const Center(
         child: Text(
           'No data found',
-          style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
         ),
       );
     }
@@ -490,7 +538,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     );
   }
 
-
   void _navigateToDetail(Map<String, dynamic> cv) {
     Navigator.push(
       context,
@@ -499,8 +546,9 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         pageBuilder: (_, __, ___) => CVDetailPage(cv: cv),
         transitionsBuilder: (_, animation, __, child) {
           return SlideTransition(
-            position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
-                .animate(animation),
+            position:
+                Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                    .animate(animation),
             child: child,
           );
         },
