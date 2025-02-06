@@ -177,6 +177,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   @override
   Widget build(BuildContext context) {
+    
     // Get screen width and height
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
