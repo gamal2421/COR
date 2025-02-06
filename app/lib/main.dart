@@ -289,7 +289,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      'images/ntgschool.png',
+                      'images/ntgschool.jpg',
                       width: 80,
                       height: 50,
                       fit: BoxFit.cover,

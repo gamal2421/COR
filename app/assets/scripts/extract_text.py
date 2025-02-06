@@ -62,9 +62,10 @@ def extract_info(cv_text):
     - Certifications
     - Skills
     - Projects
-    if no Certifications  then dont have any Certifications
-    make the null =  not provided
-    Return the result in JSON format.
+    -- if there any more info make a header for it and add it
+    -- if no Certifications  = dont have any Certifications
+    -- make the null =  not provided
+    - Return the result in JSON format.
 
     CV text:
     {cv_text}
