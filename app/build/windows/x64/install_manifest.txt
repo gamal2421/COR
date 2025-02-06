@@ -1,6 +1,7 @@
 E:/COR-1/app/build/windows/x64/runner/Debug/data/icudtl.dat
 E:/COR-1/app/build/windows/x64/runner/Debug/flutter_windows.dll
 E:/COR-1/app/build/windows/x64/runner/Debug/permission_handler_windows_plugin.dll
+E:/COR-1/app/build/windows/x64/runner/Debug/url_launcher_windows_plugin.dll
 E:/COR-1/app/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
 E:/COR-1/app/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
 E:/COR-1/app/build/windows/x64/runner/Debug/data/flutter_assets/FontManifest.json

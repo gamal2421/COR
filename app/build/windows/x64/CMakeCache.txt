@@ -219,6 +219,12 @@ untitled_BINARY_DIR:STATIC=E:/COR-1/app/build/windows/x64
 //Value Computed by CMake
 untitled_SOURCE_DIR:STATIC=E:/COR-1/app/windows
 
+//Value Computed by CMake
+url_launcher_windows_BINARY_DIR:STATIC=E:/COR-1/app/build/windows/x64/plugins/url_launcher_windows
+
+//Value Computed by CMake
+url_launcher_windows_SOURCE_DIR:STATIC=E:/COR-1/app/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/windows
+
 
 ########################
 # INTERNAL cache entries
@@ -298,7 +304,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //noop for ranlib

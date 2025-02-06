@@ -11,3 +11,6 @@ E:/COR-1/app/build/windows/x64/runner/CMakeFiles/ALL_BUILD.dir
 E:/COR-1/app/build/windows/x64/plugins/permission_handler_windows/CMakeFiles/permission_handler_windows_plugin.dir
 E:/COR-1/app/build/windows/x64/plugins/permission_handler_windows/CMakeFiles/INSTALL.dir
 E:/COR-1/app/build/windows/x64/plugins/permission_handler_windows/CMakeFiles/ALL_BUILD.dir
+E:/COR-1/app/build/windows/x64/plugins/url_launcher_windows/CMakeFiles/url_launcher_windows_plugin.dir
+E:/COR-1/app/build/windows/x64/plugins/url_launcher_windows/CMakeFiles/INSTALL.dir
+E:/COR-1/app/build/windows/x64/plugins/url_launcher_windows/CMakeFiles/ALL_BUILD.dir

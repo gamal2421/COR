@@ -153,6 +153,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{E84FB24E-B0A0-310A-B2DD-A5A0391CD9B2}</Project>
       <Name>untitled</Name>
     </ProjectReference>
+    <ProjectReference Include="E:\COR-1\app\build\windows\x64\plugins\url_launcher_windows\url_launcher_windows_plugin.vcxproj">
+      <Project>{A60A3D69-1878-3CAD-BFDA-351261A4754F}</Project>
+      <Name>url_launcher_windows_plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

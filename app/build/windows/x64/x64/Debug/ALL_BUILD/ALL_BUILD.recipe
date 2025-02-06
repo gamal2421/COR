@@ -11,6 +11,9 @@
       <FullPath>E:\COR-1\app\build\windows\x64\plugins\permission_handler_windows\Debug\permission_handler_windows_plugin.dll</FullPath>
     </ProjectOutput>
     <ProjectOutput>
+      <FullPath>E:\COR-1\app\build\windows\x64\plugins\url_launcher_windows\Debug\url_launcher_windows_plugin.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
       <FullPath>E:\COR-1\app\build\windows\x64\runner\Debug\untitled.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>

@@ -176,7 +176,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="E:\COR-1\app\build\windows\x64\ALL_BUILD.vcxproj">
+    <ProjectReference Include="E:\COR-1\app\build\windows\x64\plugins\url_launcher_windows\ALL_BUILD.vcxproj">
       <Project>{7DD956CA-4FB7-3DE1-97D5-C617F4CD3802}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

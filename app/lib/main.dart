@@ -220,7 +220,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10), // Adjust as needed
                     child: Image.asset(
-                      'assets\\img\\sclog.jpg',
+                      'assets/img/sclog.jpg',
                       width: 80,
                       height: 50,
                       fit: BoxFit.cover,
