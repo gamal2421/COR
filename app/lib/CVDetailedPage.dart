@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CVDetailPage extends StatelessWidget {
   final Map<String, dynamic> cv;
-  const CVDetailPage({super.key, required this.cv});
+  const CVDetailPage({Key? key, required this.cv}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +74,9 @@ class CVDetailPage extends StatelessWidget {
 
   Widget _buildDetailRow(BuildContext context, String label, dynamic value) {
     // Helper function to build a widget for a Map.
+    if(value == null || (value is String && value.contains("not provided"))){
+      return const SizedBox();
+    }
     Widget buildMapWidget(BuildContext context, Map map) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +144,6 @@ class CVDetailPage extends StatelessWidget {
               icon: const Icon(Icons.copy, size: 16),
               onPressed: () async {
                 await Clipboard.setData(ClipboardData(text: text));
-                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text('Phone number copied to clipboard')),
