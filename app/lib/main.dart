@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:process_run/process_run.dart';
 import 'dart:convert';
 import 'CVDetailedPage.dart';
+
 const projectId = 'ocrcv-1e6fe';
 
 void main() async {
@@ -199,7 +200,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       final pythonPath = 'python'; // Or 'python3'
       // Path to your Python script (ensure this is correct)
       final scriptPath = 'assets/scripts/extract_text.py';
-      
+
       // Run the Python script with the file path as an argument
       final result = await runExecutableArguments(
         pythonPath,
@@ -223,6 +224,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     try {
       final document = await cvCollection.add(data);
       _showSnackbar("✅ Data uploaded: ${document.id}", Colors.green);
+      getData();
     } catch (e) {
       _showSnackbar("❌ Error uploading data: $e", Colors.red);
     }
@@ -245,6 +247,20 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              getData();
+            },
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -298,10 +314,11 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                       fontSize: 12,
                     ),
                   ),
-                  const Spacer(),
+                  const SizedBox(
+                    width: 400,
+                  ),
                   const Text(
                     'V 0.1.1',
-                    textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 13,
@@ -546,9 +563,8 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         pageBuilder: (_, __, ___) => CVDetailPage(cv: cv),
         transitionsBuilder: (_, animation, __, child) {
           return SlideTransition(
-            position:
-                Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
-                    .animate(animation),
+            position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                .animate(animation),
             child: child,
           );
         },
