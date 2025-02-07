@@ -41,8 +41,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   List<Map<String, dynamic>> allCVs = [];
   List<Map<String, dynamic>> displayedCVs = [];
   String searchQuery = "";
-  int _currentPage = 0;
-  final int _itemsPerPage = 6;
   final ScrollController _scrollController = ScrollController();
 
   // Filter checkboxes (independent of each other)
@@ -58,7 +56,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   void initState() {
     super.initState();
     getData();
-    _scrollController.addListener(_loadMore);
   }
 
   @override
@@ -87,27 +84,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     });
   }
 
-  void _loadMore() {
-    // Disable pagination when a search query is active or when filtering
-    if (searchQuery.isNotEmpty) return;
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      setState(() {
-        _currentPage++;
-        int startIndex = _currentPage * _itemsPerPage;
-        int endIndex = startIndex + _itemsPerPage;
-        if (startIndex < allCVs.length) {
-          displayedCVs.addAll(
-            allCVs.sublist(
-              startIndex,
-              endIndex < allCVs.length ? endIndex : allCVs.length,
-            ),
-          );
-        }
-      });
-    }
-  }
-
   void _showSnackbar(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -129,42 +105,41 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   }
 
   void _applyFilters() {
-    List<Map<String, dynamic>> filtered = allCVs.where((cv) {
-      if (isEducationChecked &&
-          (cv['Education'] == null ||
-              cv['Education'].toString().trim().isEmpty)) {
-        return false;
-      }
-      if (isSkillsChecked &&
-          (cv['Skills'] == null || cv['Skills'].toString().trim().isEmpty)) {
-        return false;
-      }
-      if (isCertificationChecked &&
-          (cv['Certifications'] == null ||
-              cv['Certifications'].toString().trim().isEmpty)) {
-        return false;
-      }
-      if (isLanguageChecked &&
-          (cv['Languages'] == null ||
-              cv['Languages'].toString().trim().isEmpty)) {
-        return false;
-      }
-      if (searchQuery.isNotEmpty) {
-        List<String> fields = _getActiveFilterFields();
-        bool matches = fields.any((field) {
-          final fieldValue = (cv[field] ?? '').toString().toLowerCase();
-          return fieldValue.contains(searchQuery);
-        });
-        if (!matches) return false;
-      }
-      return true;
-    }).toList();
+  List<Map<String, dynamic>> filtered = allCVs.where((cv) {
+    if (isEducationChecked &&
+        (cv['Education'] == null || cv['Education'].toString().trim().isEmpty)) {
+      return false;
+    }
+    if (isSkillsChecked &&
+        (cv['Skills'] == null || cv['Skills'].toString().trim().isEmpty)) {
+      return false;
+    }
+    if (isCertificationChecked &&
+        (cv['Certifications'] == null ||
+            cv['Certifications'].toString().trim().isEmpty)) {
+      return false;
+    }
+    if (isLanguageChecked &&
+        (cv['Languages'] == null ||
+            cv['Languages'].toString().trim().isEmpty)) {
+      return false;
+    }
+    if (searchQuery.isNotEmpty) {
+      List<String> fields = _getActiveFilterFields();
+      bool matches = fields.any((field) {
+        final fieldValue = (cv[field] ?? '').toString().toLowerCase();
+        return fieldValue.contains(searchQuery);
+      });
+      if (!matches) return false;
+    }
+    return true;
+  }).toList();
 
-    setState(() {
-      _currentPage = 0;
-      displayedCVs = filtered.take(_itemsPerPage).toList();
-    });
-  }
+  setState(() {
+    // Display all filtered CVs:
+    displayedCVs = filtered;
+  });
+}
 
   /// ---------------
   /// File Processing
