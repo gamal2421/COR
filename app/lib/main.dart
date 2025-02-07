@@ -197,9 +197,9 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
     try {
       // Set the Python executable (adjust if needed for your environment)
-      final pythonPath = 'python'; // Or 'python3'
+      const pythonPath = 'python'; // Or 'python3'
       // Path to your Python script (ensure this is correct)
-      final scriptPath = 'assets/scripts/extract_text.py';
+      const scriptPath = 'assets/scripts/extract_text.py';
 
       // Run the Python script with the file path as an argument
       final result = await runExecutableArguments(
@@ -252,7 +252,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             onPressed: () {
               getData();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.refresh,
               color: Colors.white,
             ),
@@ -288,11 +288,11 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                   const SizedBox(width: 30),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'images/ntgschool.jpg',
-                      width: 80,
-                      height: 50,
-                      fit: BoxFit.cover,
+                     child: Image.network(
+                    'https://ibb.co/7NNwkBCB',
+                    width: 80,
+                    height: 50,
+                   fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(width: 10),
