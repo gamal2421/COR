@@ -288,11 +288,11 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                   const SizedBox(width: 30),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                     child: Image.network(
-                    'https://ibb.co/7NNwkBCB',
-                    width: 80,
-                    height: 50,
-                   fit: BoxFit.cover,
+                    child: Image.asset(
+                      'assets/images/ntgschool.png',
+                      width: 80,
+                      height: 50,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(width: 10),
