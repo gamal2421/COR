@@ -476,11 +476,11 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
         controller: _scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 10,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 4 : 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 1.2,
         ),
         itemCount: displayedCVs.length,
         itemBuilder: (context, index) {
