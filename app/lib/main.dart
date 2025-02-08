@@ -1,9 +1,10 @@
-import 'package:firedart/firedart.dart';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:process_run/process_run.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:firedart/firedart.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:process_run/process_run.dart';
+import 'package:flutter/material.dart'; // Only Material Design
 import 'CVDetailedPage.dart';
 
 const projectId = 'ocrcv-1e6fe';
@@ -15,13 +16,14 @@ void main() async {
 
 class FireStoreApp extends StatelessWidget {
   const FireStoreApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CV\'s Dashboard',
+      title: 'CV Dashboard',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.red, // Material Colors
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: const FireStoreHome(),
@@ -38,15 +40,18 @@ class FireStoreHome extends StatefulWidget {
 
 class _FireStoreHomeState extends State<FireStoreHome> {
   CollectionReference cvCollection = Firestore.instance.collection('CV');
+  List<File> selectedFiles = [];
+  bool isUploading = false;
+
   List<Map<String, dynamic>> allCVs = [];
   List<Map<String, dynamic>> displayedCVs = [];
   String searchQuery = "";
   final ScrollController _scrollController = ScrollController();
 
-  // Filter checkboxes (independent of each other)
+  // Filter checkboxes
   bool isSkillsChecked = false;
   bool isCertificationChecked = false;
-  bool isEducationChecked = false; // New checkbox for Education
+  bool isEducationChecked = false;
   bool isLanguageChecked = false;
 
   // Variable to track loading state
@@ -74,10 +79,9 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         final data = doc.map;
         return {"id": doc.id, ...data};
       }).toList();
-      // Apply filters (if any) after data is loaded
       _applyFilters();
     } catch (e) {
-      _showSnackbar("Error retrieving CVs: $e", Colors.red);
+      _showSnackbar("Error retrieving CVs: $e", Colors.red); // Material Colors
     }
     setState(() {
       isLoading = false;
@@ -105,109 +109,120 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   }
 
   void _applyFilters() {
-  List<Map<String, dynamic>> filtered = allCVs.where((cv) {
-    if (isEducationChecked &&
-        (cv['Education'] == null || cv['Education'].toString().trim().isEmpty)) {
-      return false;
-    }
-    if (isSkillsChecked &&
-        (cv['Skills'] == null || cv['Skills'].toString().trim().isEmpty)) {
-      return false;
-    }
-    if (isCertificationChecked &&
-        (cv['Certifications'] == null ||
-            cv['Certifications'].toString().trim().isEmpty)) {
-      return false;
-    }
-    if (isLanguageChecked &&
-        (cv['Languages'] == null ||
-            cv['Languages'].toString().trim().isEmpty)) {
-      return false;
-    }
-    if (searchQuery.isNotEmpty) {
-      List<String> fields = _getActiveFilterFields();
-      bool matches = fields.any((field) {
-        final fieldValue = (cv[field] ?? '').toString().toLowerCase();
-        return fieldValue.contains(searchQuery);
-      });
-      if (!matches) return false;
-    }
-    return true;
-  }).toList();
+    List<Map<String, dynamic>> filtered = allCVs.where((cv) {
+      if (isEducationChecked &&
+          (cv['Education'] == null || cv['Education'].toString().trim().isEmpty)) {
+        return false;
+      }
+      if (isSkillsChecked &&
+          (cv['Skills'] == null || cv['Skills'].toString().trim().isEmpty)) {
+        return false;
+      }
+      if (isCertificationChecked &&
+          (cv['Certifications'] == null ||
+              cv['Certifications'].toString().trim().isEmpty)) {
+        return false;
+      }
+      if (isLanguageChecked &&
+          (cv['Languages'] == null || cv['Languages'].toString().trim().isEmpty)) {
+        return false;
+      }
+      if (searchQuery.isNotEmpty) {
+        List<String> fields = _getActiveFilterFields();
+        bool matches = fields.any((field) {
+          final fieldValue = (cv[field] ?? '').toString().toLowerCase();
+          return fieldValue.contains(searchQuery);
+        });
+        if (!matches) return false;
+      }
+      return true;
+    }).toList();
 
-  setState(() {
-    // Display all filtered CVs:
-    displayedCVs = filtered;
-  });
-}
+    setState(() {
+      displayedCVs = filtered;
+    });
+  }
 
-  /// ---------------
-  /// File Processing
-  /// ---------------
-
-  /// Picks a file (or files) then runs the Python script for each.
-  Future<void> pickAndProcessFile() async {
-    // Request storage permission
+  /// 🔹 **File Picker**
+  Future<void> pickFiles() async {
     final status = await Permission.storage.request();
     if (!status.isGranted) {
-      _showSnackbar("⚠ Permission denied!", Colors.orange);
+      _showSnackbar("⚠ Permission denied!", Colors.orange); // Material Colors
       return;
     }
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'txt'],
-      allowMultiple: false,
+      allowMultiple: true,
     );
 
     if (result != null && result.files.isNotEmpty) {
-      String filePath = result.files.first.path!;
-      await runPythonScript(filePath);
+      setState(() {
+        selectedFiles = result.files.map((file) => File(file.path!)).toList();
+      });
+
+      for (var file in selectedFiles) {
+        await runPythonScript(file.path);
+      }
     }
   }
 
-  /// Runs the Python script to process the file and upload data to Firestore.
-  Future<void> runPythonScript(String filePath) async {
-    setState(() => isLoading = true);
+  /// 🔹 **Run Python Script**
+  /// 🔹 **Run Python Script**
+Future<void> runPythonScript(String filePath) async {
+  setState(() => isUploading = true);
 
-    try {
-      // Set the Python executable (adjust if needed for your environment)
-      const pythonPath = 'python'; // Or 'python3'
-      // Path to your Python script (ensure this is correct)
-      const scriptPath = 'assets/scripts/extract_text.py';
+  try {
+    const pythonPath = 'python'; // Or 'python3'
+    const scriptPath = 'assets/scripts/extract_text.py';
 
-      // Run the Python script with the file path as an argument
-      final result = await runExecutableArguments(
+    int retryCount = 0;
+    const maxRetries = 3;
+    Map<String, dynamic>? jsonData;
+
+    while (retryCount < maxRetries) {
+      final result = await run(
         pythonPath,
         [scriptPath, filePath],
       );
 
       if (result.exitCode == 0) {
-        final jsonData = jsonDecode(result.stdout.trim());
-        await uploadDataToFirestore(jsonData);
+        jsonData = jsonDecode(result.stdout.trim());
+
+        // Check if the extracted data is valid (not null or empty)
+        if (jsonData != null && jsonData.isNotEmpty) {
+          break; // Exit the loop if valid data is found
+        } else {
+          retryCount++;
+          _showSnackbar("⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
+        }
       } else {
         _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
+        return; // Exit if there's an error
       }
-    } catch (e) {
-      _showSnackbar("❌ Error: $e", Colors.red);
-    } finally {
-      setState(() => isLoading = false);
     }
-  }
 
+    if (jsonData != null && jsonData.isNotEmpty) {
+      await uploadDataToFirestore(jsonData);
+    } else {
+      _showSnackbar("❌ Failed to extract valid data after $maxRetries attempts", Colors.red);
+    }
+  } catch (e) {
+    _showSnackbar("❌ Error: $e", Colors.red);
+  } finally {
+    setState(() => isUploading = false);
+  }
+}/// 🔹 **Upload Data to Firestore**
   Future<void> uploadDataToFirestore(Map<String, dynamic> data) async {
     try {
       final document = await cvCollection.add(data);
-      _showSnackbar("✅ Data uploaded: ${document.id}", Colors.green);
+      _showSnackbar("✅ Data uploaded to Firestore: ${document.id}", Colors.green); // Material Colors
       getData();
     } catch (e) {
-      _showSnackbar("❌ Error uploading data: $e", Colors.red);
+      _showSnackbar("❌ Error uploading data: $e", Colors.red); // Material Colors
     }
   }
-
-  /// ---------------
-  /// End File Processing
-  /// ---------------
 
   @override
   Widget build(BuildContext context) {
@@ -216,10 +231,10 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
     return Scaffold(
       appBar: AppBar(
-         automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.red[800],
         title: const Text(
-          'CV\'s Dashboard',
+          'CV Dashboard',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -233,9 +248,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
               color: Colors.white,
             ),
           ),
-          const SizedBox(
-            width: 20,
-          ),
+          const SizedBox(width: 20),
         ],
       ),
       body: Stack(
@@ -290,32 +303,21 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                       fontSize: 12,
                     ),
                   ),
-                  const SizedBox(
-                    width: 400,
-                  ),
-                  const Text(
-                    'V 0.1.1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  const SizedBox(width: 400),
                 ],
               ),
             ),
           ),
         ],
       ),
-      // Use the floating action button to initiate file picking and processing.
       floatingActionButton: FloatingActionButton(
-        onPressed: isLoading ? null : () async => await pickAndProcessFile(),
+        onPressed: isUploading ? null : pickFiles,
         backgroundColor: Colors.red[800],
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  /// The search bar applies both the text query and the filter (checkbox) requirements.
   Widget _buildSearchBar(double screenWidth) {
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),

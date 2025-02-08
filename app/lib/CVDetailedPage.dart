@@ -1,4 +1,4 @@
-import 'package:corr/main.dart';
+import 'main.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

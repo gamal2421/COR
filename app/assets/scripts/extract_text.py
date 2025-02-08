@@ -4,6 +4,8 @@ import logging
 import google.generativeai as ai
 from PyPDF2 import PdfReader
 from docx import Document
+from PIL import Image
+import pytesseract
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -14,13 +16,15 @@ ai.configure(api_key="AIzaSyC8lJJUicaOFeHBg1xrtLnn26cRhPlPb5s")
 
 # Function to extract text from various file types
 def extract_text_from_file(file_path):
-    """Extracts text from PDF, DOCX, or TXT."""
+    """Extracts text from PDF, DOCX, TXT, or image files."""
     if file_path.endswith('.pdf'):
         return extract_text_from_pdf(file_path)
     elif file_path.endswith('.docx'):
         return extract_text_from_docx(file_path)
     elif file_path.endswith('.txt'):
         return extract_text_from_txt(file_path)
+    elif file_path.endswith(('.png', '.jpg', '.jpeg')):
+        return extract_text_from_image(file_path)
     else:
         return ""
 
@@ -48,9 +52,17 @@ def extract_text_from_txt(file_path):
         logger.error(f"Error reading TXT: {e}")
         return ""
 
+def extract_text_from_image(file_path):
+    try:
+        image = Image.open(file_path)
+        return pytesseract.image_to_string(image)
+    except Exception as e:
+        logger.error(f"Error reading image: {e}")
+        return ""
+
 # Function to extract structured information from CV text using Generative AI
-def extract_info(cv_text):
-    """Extracts structured information from CV text."""
+def extract_info(cv_text, max_retries=3):
+    """Extracts structured information from CV text with retries."""
     prompt = f"""
     Extract the following information from the CV:
     - Full Name
@@ -72,14 +84,25 @@ def extract_info(cv_text):
     """
     model = ai.GenerativeModel("gemini-pro")
     chat = model.start_chat()
-    response = chat.send_message(prompt)
 
-    try:
-        extracted_info = json.loads(response.text.strip().lstrip('```json').rstrip('```').strip())
-        return extracted_info  # Return the parsed JSON directly
-    except json.JSONDecodeError:
-        logger.error("Failed to parse JSON")
-        return {}
+    for attempt in range(max_retries):
+        try:
+            response = chat.send_message(prompt)
+            extracted_info = json.loads(response.text.strip().lstrip('```json').rstrip('```').strip())
+
+            # Check if the extracted info is valid (not empty or null)
+            if extracted_info:
+                return extracted_info  # Return the parsed JSON directly
+            else:
+                logger.warning(f"Attempt {attempt + 1}: Extracted info is empty or null. Retrying...")
+
+        except json.JSONDecodeError:
+            logger.warning(f"Attempt {attempt + 1}: Failed to parse JSON. Retrying...")
+        except Exception as e:
+            logger.error(f"Attempt {attempt + 1}: Error extracting info: {e}")
+
+    logger.error("Max retries reached. Returning empty result.")
+    return {}
 
 if __name__ == "__main__":
     # Ensure file path is passed as an argument
@@ -96,7 +119,7 @@ if __name__ == "__main__":
         print(json.dumps({"error": "Failed to extract text"}))
         sys.exit(1)
 
-    # Extract structured information from the CV text
+    # Extract structured information from the CV text with retries
     result = extract_info(text)
 
     # Output the JSON result directly
