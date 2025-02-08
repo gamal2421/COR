@@ -1,10 +1,18 @@
+import 'package:corr/main.dart';
+import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CVDetailPage extends StatelessWidget {
   final Map<String, dynamic> cv;
-  const CVDetailPage({Key? key, required this.cv}) : super(key: key);
+
+  void main() async {
+    Firestore.initialize(projectId);
+  }
+
+  static const projectId = 'ocrcv-1e6fe';
+  const CVDetailPage({super.key, required this.cv});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +25,6 @@ class CVDetailPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      // Wrapping the body in a SingleChildScrollView prevents overall overflow.
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -26,15 +33,88 @@ class CVDetailPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Show a confirmation dialog before deletion
+          bool? confirmDelete = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text(
+                  'Delete CV',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: const Text(
+                  'Are you sure you want to delete this CV?',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text(
+                      'Delete',
+                      style: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+
+          if (confirmDelete == true) {
+            try {
+              // Assuming 'cv' contains the document ID for the CV you want to delete
+              final documentId =
+                  cv['id']; // Adjust this if the ID is stored differently
+              await Firestore.instance
+                  .collection(
+                      'CV') // Replace with your Firestore collection name
+                  .document(documentId)
+                  .delete();
+
+              // Show a success message after deletion
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "CV deleted successfully",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.green,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => FireStoreHome()));
+            } catch (e) {
+              // Handle errors (e.g., if the document doesn't exist)
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Error deleting CV')),
+              );
+            }
+          }
+        },
+        backgroundColor: Colors.red[800],
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
     );
   }
 
   Widget _buildDetailCard(BuildContext context) {
-    // Sort the CV entries by their keys.
     final sortedEntries = cv.entries.toList()
       ..sort((a, b) => a.key.toLowerCase().compareTo(b.key.toLowerCase()));
 
-    // Split the sorted entries into two lists for two columns.
     final halfLength = (sortedEntries.length / 2).ceil();
     final firstColumnEntries = sortedEntries.sublist(0, halfLength);
     final secondColumnEntries = sortedEntries.sublist(halfLength);
@@ -56,7 +136,7 @@ class CVDetailPage extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            const SizedBox(width: 16), // Spacing between columns
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +153,9 @@ class CVDetailPage extends StatelessWidget {
   }
 
   Widget _buildDetailRow(BuildContext context, String label, dynamic value) {
-    // Helper function to build a widget for a Map.
-    if(value == null || (value is String && value.contains("not provided"))){
+    if (value == null ||
+        (value is String && value.contains("not provided")) ||
+        (value is String && value.contains("dont have any Certifications"))) {
       return const SizedBox();
     }
     Widget buildMapWidget(BuildContext context, Map map) {
@@ -114,7 +195,6 @@ class CVDetailPage extends StatelessWidget {
       );
     }
 
-    // Helper function to build clickable text, a copyable phone number, etc.
     Widget buildValueText(BuildContext context, String text) {
       final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
       final urlRegex = RegExp(r'^(http|https):\/\/');
@@ -256,10 +336,10 @@ class CVDetailPage extends StatelessWidget {
               children: value
                   .map<Widget>(
                     (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: buildListItem(context, item),
-                ),
-              )
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      child: buildListItem(context, item),
+                    ),
+                  )
                   .toList(),
             )
           else if (value is Map)

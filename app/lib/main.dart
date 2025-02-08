@@ -216,6 +216,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         backgroundColor: Colors.red[800],
         title: const Text(
           'CV\'s Dashboard',
