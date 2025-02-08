@@ -14,7 +14,7 @@ void main() {
 }
 
 class FireStoreApp extends StatelessWidget {
-  const FireStoreApp({Key? key}) : super(key: key);
+  const FireStoreApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class FireStoreApp extends StatelessWidget {
 }
 
 class FireStoreHome extends StatefulWidget {
-  const FireStoreHome({Key? key}) : super(key: key);
+  const FireStoreHome({super.key});
 
   @override
   _FireStoreHomeState createState() => _FireStoreHomeState();
@@ -70,10 +70,10 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     try {
 
       // Check if Python is installed by running `python --version`
-      final pythonPath = 'python'; // Or 'python3', based on your environment
+      const pythonPath = 'python'; // Or 'python3', based on your environment
       
       // Ensure the Python script and paths are correctly set.
-      final scriptPath = 'assets/scripts/extract_text.py';  // Make sure the path is correct
+      const scriptPath = 'assets/scripts/extract_text.py';  // Make sure the path is correct
       
       // Running the Python script using `process_run`
       final result = await run(
@@ -134,8 +134,8 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Button(
-              child: const Text("📂 Upload & Process Files"),
               onPressed: isUploading ? null : pickFiles,
+              child: const Text("📂 Upload & Process Files"),
             ),
             const SizedBox(height: 20),
             if (isUploading) const ProgressRing(),

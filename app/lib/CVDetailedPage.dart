@@ -85,13 +85,13 @@ class CVDetailPage extends StatelessWidget {
 
               // Show a success message after deletion
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text(
                     "CV deleted successfully",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 2),
+                  duration: Duration(seconds: 2),
                 ),
               );
 

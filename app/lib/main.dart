@@ -14,7 +14,7 @@ void main() async {
 }
 
 class FireStoreApp extends StatelessWidget {
-  const FireStoreApp({Key? key}) : super(key: key);
+  const FireStoreApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,7 +30,7 @@ class FireStoreApp extends StatelessWidget {
 }
 
 class FireStoreHome extends StatefulWidget {
-  const FireStoreHome({Key? key}) : super(key: key);
+  const FireStoreHome({super.key});
 
   @override
   _FireStoreHomeState createState() => _FireStoreHomeState();
@@ -233,7 +233,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
               color: Colors.white,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
         ],
