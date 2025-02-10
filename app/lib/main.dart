@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firedart/firedart.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:process_run/process_run.dart';
 import 'package:flutter/material.dart'; // Only Material Design
@@ -79,6 +80,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         final data = doc.map;
         return {"id": doc.id, ...data};
       }).toList();
+      _processCategoryData();
       _applyFilters();
     } catch (e) {
       _showSnackbar("Error retrieving CVs: $e", Colors.red); // Material Colors
@@ -167,6 +169,17 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       }
     }
   }
+  Map<String, int> categoryCounts = {}; // Store category counts
+  void _processCategoryData() {
+    categoryCounts.clear(); // Reset before counting
+
+    categoryCounts["Skills"] = allCVs.where((cv) => cv["Skills"] != null).length;
+    categoryCounts["Certifications"] = allCVs.where((cv) => cv["Certifications"] != null).length;
+    categoryCounts["Languages"] = allCVs.where((cv) => cv["Languages"] != null).length;
+    categoryCounts["Education"] = allCVs.where((cv) => cv["Education"] != null).length;
+
+    setState(() {}); // Refresh UI after processing
+  }
 
   /// 🔹 **Run Python Script**
   /// 🔹 **Run Python Script**
@@ -223,6 +236,28 @@ Future<void> runPythonScript(String filePath) async {
       _showSnackbar("❌ Error uploading data: $e", Colors.red); // Material Colors
     }
   }
+  Widget buildCategoryChart(Map<String, int> categoryCounts) {
+    List<PieChartSectionData> sections = categoryCounts.entries.map((entry) {
+      return PieChartSectionData(
+        color: Colors.primaries[entry.key.hashCode % Colors.primaries.length],
+        value: entry.value.toDouble(),  // Use count as value
+        title: '${entry.key}\n(${entry.value})', // Show category name and count
+        radius: 60,
+        titleStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+      );
+    }).toList();
+
+    return SizedBox(
+      height: 300,
+      child: PieChart(
+        PieChartData(
+          sections: sections,
+          centerSpaceRadius: 50,
+          sectionsSpace: 3,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +295,10 @@ Future<void> runPythonScript(String filePath) async {
                 child: Column(
                   children: [
                     _buildSearchBar(screenWidth),
+                    categoryCounts.isNotEmpty
+                        ? buildCategoryChart(categoryCounts) // ✅ Correct function
+                        : const Text("No data available"),
+
                     Expanded(child: _buildCVGrid()),
                   ],
                 ),
