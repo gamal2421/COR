@@ -126,6 +126,12 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     if (activeFields.isEmpty) activeFields.add('Full Name');
     return activeFields;
   }
+  bool isFieldEmpty(dynamic value) {
+    if (value == null) return true;
+    if (value is String && value.trim().isEmpty) return true;
+    if (value is List && value.isEmpty) return true;
+    return false;
+  }
 
   void _applyFilters() {
     List<Map<String, dynamic>> filtered = allCVs.where((cv) {
