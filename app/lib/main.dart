@@ -57,6 +57,8 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   // Variable to track loading state
   bool isLoading = false;
+    int cvCount = 0;
+
 
   @override
   void initState() {
@@ -75,20 +77,35 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       isLoading = true;
     });
     try {
+      // Retrieve all documents from the collection.
       final querySnapshot = await cvCollection.get();
-      allCVs = querySnapshot.map((doc) {
+
+      // Map the documents to a list of maps.
+      List<Map<String, dynamic>> docs = querySnapshot.map((doc) {
         final data = doc.map;
         return {"id": doc.id, ...data};
       }).toList();
-      _processCategoryData();
+
+      // Filter out CVs where the required fields are null or empty.
+      // (Here we assume "Full Name" and "Email address" are required.)
+      allCVs = docs.where((cv) {
+        return !isFieldEmpty(cv["Full Name"]) &&
+            !isFieldEmpty(cv["Email address"]);
+      }).toList();
+
+      // Now update the cvCount with the count of only valid CVs.
+      cvCount = allCVs.length;
+
+      // Apply any additional filters (for checkboxes, search query, etc.)
       _applyFilters();
     } catch (e) {
-      _showSnackbar("Error retrieving CVs: $e", Colors.red); // Material Colors
+      _showSnackbar("Error retrieving CVs: $e", Colors.red);
     }
     setState(() {
       isLoading = false;
     });
   }
+
 
   void _showSnackbar(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -268,9 +285,17 @@ Future<void> runPythonScript(String filePath) async {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.red[800],
-        title: const Text(
-          'CV Dashboard',
-          style: TextStyle(color: Colors.white),
+        title:  Column(
+          children: [
+            const Text(
+              'CV\'s Dashboard',
+              style: TextStyle(color: Colors.white),
+            ),
+            Text(
+              'Count of retrived cvs: $cvCount',
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+            )
+          ],
         ),
         centerTitle: true,
         actions: [
