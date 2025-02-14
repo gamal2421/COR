@@ -231,52 +231,55 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   /// 🔹 **Run Python Script**
   Future<void> runPythonScript(String filePath) async {
-    setState(() => isUploading = true);
+  setState(() => isUploading = true);
 
-    try {
-      const pythonPath = 'python'; // Or 'python3'
-      const scriptPath = 'assets/scripts/extract_text.py';
+  try {
+    const pythonPath = 'python'; // Or 'python3'
+    const scriptPath = 'assets/scripts/extract_text.py';
 
-      int retryCount = 0;
-      const maxRetries = 3;
-      Map<String, dynamic>? jsonData;
+    int retryCount = 0;
+    const maxRetries = 3;
+    Map<String, dynamic>? jsonData;
 
-      while (retryCount < maxRetries) {
-        final result = await runExecutableArguments(
-          pythonPath,
-          [scriptPath, filePath],
-        );
+    while (retryCount < maxRetries) {
+      final result = await runExecutableArguments(
+        pythonPath,
+        [scriptPath, filePath],
+      );
 
-        if (result.exitCode == 0) {
-          jsonData = jsonDecode(result.stdout.trim());
+      if (result.exitCode == 0) {
+        jsonData = jsonDecode(result.stdout.trim());
 
-          // Check if the extracted data is valid (not null or empty)
-          if (jsonData != null && jsonData.isNotEmpty) {
-            break;
-          } else {
-            retryCount++;
-            _showSnackbar(
-                "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
-          }
+        // Check if the extracted data is valid (not null or empty)
+        if (jsonData != null && jsonData.isNotEmpty) {
+          // 🔹 Add the isAssigned field here
+          jsonData["isAssigned"] = "No"; 
+          break;
         } else {
-          _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
-          return;
+          retryCount++;
+          _showSnackbar(
+              "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
         }
-      }
-
-      if (jsonData != null && jsonData.isNotEmpty) {
-        await uploadDataToFirestore(jsonData);
       } else {
-        _showSnackbar(
-            "❌ Failed to extract valid data after $maxRetries attempts",
-            Colors.red);
+        _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
+        return;
       }
-    } catch (e) {
-      _showSnackbar("❌ Error: $e", Colors.red);
-    } finally {
-      setState(() => isUploading = false);
     }
+
+    if (jsonData != null && jsonData.isNotEmpty) {
+      await uploadDataToFirestore(jsonData);
+    } else {
+      _showSnackbar(
+          "❌ Failed to extract valid data after $maxRetries attempts",
+          Colors.red);
+    }
+  } catch (e) {
+    _showSnackbar("❌ Error: $e", Colors.red);
+  } finally {
+    setState(() => isUploading = false);
   }
+}
+
 
   /// 🔹 **Upload Data to Firestore**
   Future<void> uploadDataToFirestore(Map<String, dynamic> data) async {
@@ -362,7 +365,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             unselectedLabelStyle:
                 TextStyle(fontSize: 14), // Unselected tab text style
             tabs: [
-              Tab(text: 'Cv\'s'),
+              Tab(text: 'Cvs'),
               Tab(text: "Charts"),
             ],
           ),
