@@ -53,7 +53,7 @@ class _CVDetailPageState extends State<CVDetailPage> {
           FloatingActionButton(
             heroTag: "Assign",
             backgroundColor: Colors.red[800],
-            child: const Icon(Icons.assignment, color: Colors.white),
+            child: const Icon(Icons.assignment_ind_sharp, color: Colors.white),
             onPressed: () async {
               try {
                 // Get the document ID from the cv map.
@@ -85,6 +85,45 @@ class _CVDetailPageState extends State<CVDetailPage> {
                 );
               }
             },
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          FloatingActionButton(
+            onPressed: () async {
+                 try {
+                final documentId = widget.cv['id'];
+                await Firestore.instance
+                    .collection('CV')
+                    .document(documentId)
+                    .update({'isAssigned': 'No'});
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Employee is De-Assigned successfully'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                setState(() {
+                  cv["isAssigned"] = "No";
+                });
+              } catch (e) {
+                // Handle errors if the update fails.
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error updating CV: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            heroTag: "DeAssign",
+            backgroundColor: Colors.red[800],
+            child: Icon(
+              Icons.assignment_return_sharp,
+              color: Colors.white,
+            ),
           ),
           SizedBox(
             width: 10,
