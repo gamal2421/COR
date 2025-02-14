@@ -161,13 +161,23 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         return false;
       }
       if (searchQuery.isNotEmpty) {
-        List<String> fields = _getActiveFilterFields();
-        bool matches = fields.any((field) {
-          final fieldValue = (cv[field] ?? '').toString().toLowerCase();
-          return fieldValue.contains(searchQuery);
+        // Split the query into individual terms (ignoring extra spaces)
+        final searchTerms = searchQuery
+            .split(RegExp(r'\s+'))
+            .where((term) => term.isNotEmpty)
+            .toList();
+
+        // Check that every term is found in at least one of the active fields
+        bool matchesAllTerms = searchTerms.every((term) {
+          return _getActiveFilterFields().any((field) {
+            final fieldValue = (cv[field] ?? '').toString().toLowerCase();
+            return fieldValue.contains(term);
+          });
         });
-        if (!matches) return false;
+
+        if (!matchesAllTerms) return false;
       }
+
       return true;
     }).toList();
 
