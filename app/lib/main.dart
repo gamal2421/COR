@@ -61,6 +61,20 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   // Chart data
   Map<String, int> categoryCounts = {};
+// Chart Data Variables
+  Map<String, int> certificationCounts = {};
+  List<Map<String, String>> educationTimeline = [];
+  Map<String, int> languageCounts = {};
+  Map<String, int> projectContributions = {};
+  Map<String, int> applicationStatusCounts = {};
+  List<String> projectList = ["All Projects"];
+  List<String> technologyList = ["All Technologies"];
+  List<BarChartGroupData> filteredBarGroups = [];
+  List<String> projectNames = [];
+  String selectedProjectFilter = "All Projects";
+  String selectedTechnologyFilter = "All Technologies";
+  bool animateChart = false;
+
 
   @override
   void initState() {
@@ -100,7 +114,36 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
       // Update the chart data based on the full data set
       _processCategoryData();
+      _processCertificationsOverview();
+      _processEducationTimeline();
+      _processLanguagesProficiency();
+      _processProjectsContribution();
+      _processJobApplicationsStatus();
 
+      projectList = ["All Projects"];
+      technologyList = ["All Technologies"];
+
+      for (var cv in allCVs) {
+        if (cv['Projects'] is List) {
+          for (var project in cv['Projects']) {
+            if (project is Map) {
+              if (project['Name'] is String && !projectList.contains(project['Name'])) {
+                projectList.add(project['Name']);
+              }
+              if (project['Technologies'] is List) {
+                for (var tech in project['Technologies']) {
+                  if (tech is Map && tech['Name'] is String && !technologyList.contains(tech['Name'])) {
+                    technologyList.add(tech['Name']);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+      _filterProjects();
       // Apply any additional filters (checkboxes, search query, etc.)
       _applyFilters();
     } catch (e) {
@@ -181,10 +224,8 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       return true;
     }).toList();
 
-    // If you want the chart to reflect filtered data,
-    // call _processCategoryData(filtered) here instead.
-    // For now, we'll keep chart based on full data.
-    // _processCategoryData(filtered);
+
+
 
     setState(() {
       displayedCVs = filtered;
@@ -215,7 +256,123 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       }
     }
   }
+  void _processCertificationsOverview() {
+    certificationCounts.clear();
 
+    certificationCounts["Completed"] = allCVs.where((cv) => cv["Certifications"] != null).length;
+    certificationCounts["In Progress"] = allCVs.where((cv) => cv["Certifications"] == null).length;
+  }
+
+// 🔹 3. Education Timeline
+  void _processEducationTimeline() {
+    educationTimeline.clear();
+
+    for (var cv in allCVs) {
+      if (cv['Education'] is List) {
+        for (var edu in cv['Education']) {
+          if (edu is Map && edu['Degree'] is String) {
+            educationTimeline.add({
+              "Degree": edu['Degree'],
+              "DatesAttended": edu['DatesAttended'] ?? ""
+            });
+          }
+        }
+      }
+    }
+  }
+
+// 🔹 4. Languages Proficiency
+  void _processLanguagesProficiency() {
+    languageCounts.clear();
+
+    for (var cv in allCVs) {
+      if (cv['Languages'] is List) {
+        for (var language in cv['Languages']) {
+          languageCounts[language] = (languageCounts[language] ?? 0) + 1;
+        }
+      }
+    }
+  }
+  void _filterProjects() {
+    List<BarChartGroupData> barGroups = [];
+    Map<String, int> projectCounts = {};
+    projectNames = [];
+
+    for (var cv in allCVs) {
+      if (cv['Projects'] is List) {
+        for (var project in cv['Projects']) {
+          if (project is Map && project['Name'] is String) {
+            // Apply Project Name Filter
+            bool projectMatch = selectedProjectFilter == "All Projects" || project['Name'] == selectedProjectFilter;
+            // Apply Technology Filter
+            bool techMatch = selectedTechnologyFilter == "All Technologies" ||
+                (project['Technologies'] is List &&
+                    (project['Technologies'] as List).any((tech) => tech['Name'] == selectedTechnologyFilter));
+
+            if (projectMatch && techMatch) {
+              String projectName = project['Name'];
+              projectCounts[projectName] = (projectCounts[projectName] ?? 0) + 1;
+            }
+          }
+        }
+      }
+    }
+
+    int index = 0;
+    projectCounts.forEach((projectName, count) {
+      projectNames.add(projectName);
+      barGroups.add(
+        BarChartGroupData(
+          x: index,
+          barRods: [
+            BarChartRodData(
+              toY: count.toDouble(),
+              color: Colors.blue,
+              width: 20,
+            ),
+          ],
+          showingTooltipIndicators: [0],
+        ),
+      );
+      index++;
+    });
+
+    setState(() {
+      filteredBarGroups = barGroups; // Ensure this is set
+    });
+  }// 🔹 5. Projects Contribution
+  void _processProjectsContribution() {
+    projectContributions.clear();
+
+    for (var cv in allCVs) {
+      if (cv['Projects'] is List) {
+        for (var project in cv['Projects']) {
+          if (project is Map && project['Role'] is String) {
+            projectContributions[project['Role']] =
+                (projectContributions[project['Role']] ?? 0) + 1;
+          }
+        }
+      }
+    }
+  }
+
+// 🔹 6. Job Applications Status
+  void _processJobApplicationsStatus() {
+    applicationStatusCounts.clear();
+
+    applicationStatusCounts["Submitted"] = allCVs.where((cv) =>
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Submitted").length;
+    applicationStatusCounts["Interview Scheduled"] = allCVs.where((cv) =>
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Interview Scheduled").length;
+    applicationStatusCounts["Accepted"] = allCVs.where((cv) =>
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Accepted").length;
+    applicationStatusCounts["Rejected"] = allCVs.where((cv) =>
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Rejected").length;
+  }
   void _processCategoryData() {
     categoryCounts.clear();
     categoryCounts["Skills"] =
@@ -316,6 +473,156 @@ class _FireStoreHomeState extends State<FireStoreHome> {
       ),
     );
   }
+  Widget buildCertificationsOverviewChart() {
+    List<PieChartSectionData> sections = certificationCounts.entries.map((entry) {
+      return PieChartSectionData(
+        value: entry.value.toDouble(),
+        title: '${entry.key}\n(${entry.value})',
+        color: Colors.primaries[entry.key.hashCode % Colors.primaries.length],
+        radius: 60,
+        titleStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+      );
+    }).toList();
+
+    return SizedBox(
+      height: 300,
+      child: PieChart(
+        PieChartData(
+          sections: sections,
+          centerSpaceRadius: 80,
+          sectionsSpace: 4,
+        ),
+      ),
+    );
+  }
+  Widget buildProjectsContributionChart() {
+    return SizedBox(
+      height: 300,
+      child: BarChart(
+        BarChartData(
+          barGroups: filteredBarGroups,
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: true, interval: 1),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (double value, TitleMeta meta) {
+                  String projectName = filteredBarGroups[value.toInt()].barRods.first.toY.toString();
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    child: Text(projectName, style: TextStyle(fontSize: 10)),
+                  );
+                },
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: false),
+          barTouchData: BarTouchData(
+            touchTooltipData: BarTouchTooltipData(
+              tooltipBgColor: Colors.black87.withOpacity(0.8),
+              tooltipPadding: const EdgeInsets.all(8),
+              tooltipRoundedRadius: 8,
+            ),
+          ),
+        ),
+        swapAnimationDuration: Duration(milliseconds: animateChart ? 800 : 0), // Animation Duration
+        swapAnimationCurve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  Widget buildLanguagesProficiencyChart() {
+    Map<String, int> displayData = Map<String, int>.from(languageCounts);
+
+    // Ensure at least 3 entries by adding placeholders
+    while (displayData.length < 3) {
+      displayData["Placeholder ${displayData.length + 1}"] = 0;
+    }
+
+    List<RadarDataSet> dataSets = [
+      RadarDataSet(
+        dataEntries: displayData.entries.map((entry) => RadarEntry(value: entry.value.toDouble())).toList(),
+        fillColor: Colors.blue.withOpacity(0.4),
+        borderColor: Colors.blue,
+        entryRadius: 3,
+      ),
+    ];
+
+    return SizedBox(
+      height: 300,
+      child: RadarChart(
+        RadarChartData(
+          dataSets: dataSets,
+          radarBackgroundColor: Colors.transparent,
+          borderData: FlBorderData(show: false),
+          titlePositionPercentageOffset: 0.2,
+          getTitle: (index, angle) {
+            return RadarChartTitle(
+              text: displayData.keys.elementAt(index),
+              angle: angle,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildEducationTimelineChart() {
+    List<FlSpot> spots = [];
+    List<String> labels = [];
+
+    for (int i = 0; i < educationTimeline.length; i++) {
+      String dates = educationTimeline[i]['DatesAttended'] ?? '';
+      String degree = educationTimeline[i]['Degree'] ?? 'Unknown';
+      List<String> years = dates.split('–');
+
+      if (years.length == 2) {
+        double startYear = double.tryParse(years[0].trim().split(' ').last) ?? 0;
+        double endYear = double.tryParse(years[1].trim().split(' ').last) ?? 0;
+
+        spots.add(FlSpot(startYear, i.toDouble()));
+        spots.add(FlSpot(endYear, i.toDouble()));
+        labels.add(degree);
+      }
+    }
+
+    return SizedBox(
+      height: 500,
+      child: LineChart(
+        LineChartData(
+          lineBarsData: [
+            LineChartBarData(
+              spots: spots,
+              isCurved: false,
+              color: Colors.blue,
+              barWidth: 3,
+              dotData: FlDotData(show: true),
+            ),
+          ],
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (double value, TitleMeta meta) {
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    child: Text(value.toInt().toString(), style: TextStyle(fontSize: 10)),
+                  );
+                },
+              ),
+            ),
+          ),
+          gridData: FlGridData(show: true),
+          borderData: FlBorderData(show: false),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -381,15 +688,105 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                     children: [
                       _buildSearchBar(screenWidth),
                       Expanded(child: _buildCVGrid()),
+
                     ],
                   ),
                   // Chart Tab
-                  Center(
-                    child: categoryCounts.isNotEmpty
-                        ? buildCategoryChart(categoryCounts)
-                        : const Text("No data available"),
-                  ),
-                ],
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: categoryCounts.isNotEmpty
+                              ? buildCategoryChart(categoryCounts)
+                              : const Text("No data available"),
+                        ),
+                        // Skills Distribution Chart
+
+                        // Certifications Overview Chart
+                        Text(
+                          "Certifications Overview",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        certificationCounts.isNotEmpty
+                            ? buildCertificationsOverviewChart()
+                            : const Text("No certifications data available"),
+
+                        const SizedBox(height: 100),
+
+                        // Education Timeline Chart
+                        Text(
+                          "Education Timeline",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        educationTimeline.isNotEmpty
+                            ? buildEducationTimelineChart()
+                            : const Text("No education data available"),
+
+                        const SizedBox(height: 20),
+
+                        // Projects Contribution Filter Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // Project Name Filter
+                            DropdownButton<String>(
+                              value: selectedProjectFilter,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedProjectFilter = newValue!;
+                                });
+                                _filterProjects(); // Apply filters when selection changes
+                              },
+                              items: projectList.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+
+                            // Technology Filter
+                            DropdownButton<String>(
+                              value: selectedTechnologyFilter,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedTechnologyFilter = newValue!;
+                                });
+                                _filterProjects(); // Apply filters when selection changes
+                              },
+                              items: technologyList.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+
+                        // Projects Contribution Chart
+                        Text(
+                          "Projects Contribution",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        filteredBarGroups.isNotEmpty
+                            ? buildProjectsContributionChart()
+                            : const Text("No project contribution data available"),
+
+                        const SizedBox(height: 120),
+
+                        // Languages Proficiency Chart
+                        Text(
+                          "Languages Proficiency",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 15,),
+                        languageCounts.isNotEmpty
+                            ? buildLanguagesProficiencyChart()
+                            : const Text("No languages data available"),
+                      ],
+                    ),
+                  ),                ],
               ),
             ),
           ],
