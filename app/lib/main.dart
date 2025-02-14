@@ -72,39 +72,42 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     super.dispose();
   }
 
-  Future<void> getData() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      // Retrieve all documents from the collection.
-      final querySnapshot = await cvCollection.get();
+Future<void> getData() async {
+  setState(() {
+    isLoading = true;
+  });
+  try {
+    // Retrieve all documents from the collection.
+    final querySnapshot = await cvCollection.get();
 
-      // Map the documents to a list of maps.
-      List<Map<String, dynamic>> docs = querySnapshot.map((doc) {
-        final data = doc.map;
-        return {"id": doc.id, ...data};
-      }).toList();
+    // Map the documents to a list of maps.
+    List<Map<String, dynamic>> docs = querySnapshot.map((doc) {
+      final data = doc.map;
+      return {"id": doc.id, ...data};
+    }).toList();
 
-      // Filter out CVs where the required fields are null or empty.
-      // (Here we assume "Full Name" and "Email address" are required.)
-      allCVs = docs.where((cv) {
-        return !isFieldEmpty(cv["Full Name"]) &&
-            !isFieldEmpty(cv["Email address"]);
-      }).toList();
+    // Filter out CVs where the required fields are null or empty.
+    // (Here we assume "Full Name" and "Email address" are required.)
+    allCVs = docs.where((cv) {
+      return !isFieldEmpty(cv["Full Name"]) &&
+          !isFieldEmpty(cv["Email address"]);
+    }).toList();
 
-      // Now update the cvCount with the count of only valid CVs.
-      cvCount = allCVs.length;
+    // Update the CV count.
+    cvCount = allCVs.length;
 
-      // Apply any additional filters (for checkboxes, search query, etc.)
-      _applyFilters();
-    } catch (e) {
-      _showSnackbar("Error retrieving CVs: $e", Colors.red);
-    }
-    setState(() {
-      isLoading = false;
-    });
+    // *** Call _processCategoryData() here to update the chart data ***
+    _processCategoryData();
+
+    // Apply any additional filters (checkboxes, search query, etc.)
+    _applyFilters();
+  } catch (e) {
+    _showSnackbar("Error retrieving CVs: $e", Colors.red);
   }
+  setState(() {
+    isLoading = false;
+  });
+}
 
 
   void _showSnackbar(String message, Color color) {
