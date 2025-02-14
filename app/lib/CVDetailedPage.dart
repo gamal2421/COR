@@ -4,15 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CVDetailPage extends StatelessWidget {
+class CVDetailPage extends StatefulWidget {
   final Map<String, dynamic> cv;
-
-  void main() async {
-    Firestore.initialize(projectId);
-  }
 
   static const projectId = 'ocrcv-1e6fe';
   const CVDetailPage({super.key, required this.cv});
+
+  @override
+  State<CVDetailPage> createState() => _CVDetailPageState();
+}
+
+class _CVDetailPageState extends State<CVDetailPage> {
+  void main() async {
+    Firestore.initialize(CVDetailPage.projectId);
+  }
+
+  late Map<String, dynamic> cv;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    cv = widget.cv;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,86 +47,131 @@ class CVDetailPage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Show a confirmation dialog before deletion
-          bool? confirmDelete = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text(
-                  'Delete CV',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                content: const Text(
-                  'Are you sure you want to delete this CV?',
-                  style: TextStyle(
-                    fontSize: 16,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: "Assign",
+            backgroundColor: Colors.red[800],
+            child: const Icon(Icons.assignment, color: Colors.white),
+            onPressed: () async {
+              try {
+                // Get the document ID from the cv map.
+                final documentId = widget.cv['id'];
+                // Update the 'isAssigned' field to 'Yes' in Firestore.
+                await Firestore.instance
+                    .collection('CV')
+                    .document(documentId)
+                    .update({'isAssigned': 'Yes'});
+
+                // Optionally, show a success message.
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Employee is Assigned successfully'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
                   ),
-                ),
-                actions: [
-                  TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
+                );
+                setState(() {
+                  cv["isAssigned"] = "Yes";
+                });
+              } catch (e) {
+                // Handle errors if the update fails.
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error updating CV: $e'),
+                    backgroundColor: Colors.red,
                   ),
-                  TextButton(
-                    child: const Text(
-                      'Delete',
-                      style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                  ),
-                ],
-              );
+                );
+              }
             },
-          );
-
-          if (confirmDelete == true) {
-            try {
-              // Assuming 'cv' contains the document ID for the CV you want to delete
-              final documentId =
-                  cv['id']; // Adjust this if the ID is stored differently
-              await Firestore.instance
-                  .collection(
-                      'CV') // Replace with your Firestore collection name
-                  .document(documentId)
-                  .delete();
-
-              // Show a success message after deletion
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "CV deleted successfully",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          FloatingActionButton(
+            heroTag: "Delete",
+            onPressed: () async {
+              // Show a confirmation dialog before deletion
+              bool? confirmDelete = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Delete CV',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    content: const Text(
+                      'Are you sure you want to delete this CV?',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text(
+                          'Delete',
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
 
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => FireStoreHome()));
-            } catch (e) {
-              // Handle errors (e.g., if the document doesn't exist)
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Error deleting CV')),
-              );
-            }
-          }
-        },
-        backgroundColor: Colors.red[800],
-        child: const Icon(Icons.delete, color: Colors.white),
+              if (confirmDelete == true) {
+                try {
+                  // Assuming 'cv' contains the document ID for the CV you want to delete
+                  final documentId = widget
+                      .cv['id']; // Adjust this if the ID is stored differently
+                  await Firestore.instance
+                      .collection(
+                          'CV') // Replace with your Firestore collection name
+                      .document(documentId)
+                      .delete();
+
+                  // Show a success message after deletion
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "CV deleted successfully",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => FireStoreHome()));
+                } catch (e) {
+                  // Handle errors (e.g., if the document doesn't exist)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Error deleting CV')),
+                  );
+                }
+              }
+            },
+            backgroundColor: Colors.red[800],
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildDetailCard(BuildContext context) {
-    final sortedEntries = cv.entries.toList()
+    final sortedEntries = widget.cv.entries.toList()
       ..sort((a, b) => a.key.toLowerCase().compareTo(b.key.toLowerCase()));
 
     final halfLength = (sortedEntries.length / 2).ceil();
