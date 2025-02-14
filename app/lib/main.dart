@@ -395,6 +395,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          heroTag: "Add",
           onPressed: isUploading ? null : pickFiles,
           backgroundColor: Colors.red[800],
           child: const Icon(Icons.add, color: Colors.white),
