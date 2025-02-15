@@ -1,5 +1,6 @@
 // lib/CVDetailPage.dart
 import 'package:corr/CVDetailBuilders/BuildDetailCard.dart';
+import 'package:corr/Else/SnackBar.dart';
 import 'package:corr/Pages/ArchivePage.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
@@ -60,24 +61,14 @@ class _CVDetailPageState extends State<CVDetailPage> {
                     .collection('CV')
                     .document(documentId)
                     .update({'isAssigned': 'Yes'});
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Employee is Assigned successfully'),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                    showSnackbar("Employee is assigned successfully", Colors.green,
+          context);
                 setState(() {
                   cv["isAssigned"] = "Yes";
                 });
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error updating CV: $e'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+    showSnackbar("Error updating cv: $e", Colors.red,
+          context);
               }
             },
           ),
@@ -96,23 +87,14 @@ class _CVDetailPageState extends State<CVDetailPage> {
                     .document(documentId)
                     .update({'isAssigned': 'No'});
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Employee is De-Assigned successfully'),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                    showSnackbar("Employee is De-Assigned successfully", Colors.green,
+          context);
                 setState(() {
                   cv["isAssigned"] = "No";
                 });
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error updating CV: $e'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+                   showSnackbar("Error updating cv: $e", Colors.red,
+          context);
               }
             },
           ),
@@ -137,30 +119,17 @@ class _CVDetailPageState extends State<CVDetailPage> {
                     .document(documentId)
                     .delete();
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('CV archived successfully'),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-
-                // If a callback is provided, call it to update the parent widget.
+                    showSnackbar("CV archived successfully", Colors.green,
+          context);
                 if (widget.onArchive != null) {
                   widget.onArchive!(documentId);
                 }
-
-                // Navigate to the ArchivePage
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const ArchivePage()),
                 );
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error archiving CV: $e'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+                    showSnackbar("Error archiving cv: $e", Colors.red,
+          context);
               }
             },
           ),
@@ -213,23 +182,14 @@ class _CVDetailPageState extends State<CVDetailPage> {
                       .document(documentId)
                       .delete();
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "CV deleted successfully",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                     showSnackbar("CV deleted successfully", Colors.green,
+          context);
 
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => const FireStoreHome()));
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Error deleting CV')),
-                  );
+                      showSnackbar("Error deleting cv: $e", Colors.red,
+          context);
                 }
               }
             },
