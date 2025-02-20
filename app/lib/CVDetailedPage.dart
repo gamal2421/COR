@@ -206,41 +206,52 @@ class _CVDetailPageState extends State<CVDetailPage> {
 
   // Function to unarchive a CV
   Future<void> _unarchiveCV() async {
-    try {
-      final documentId = widget.cv['id'];
-      final cvData = await Firestore.instance
-          .collection('Archive')
-          .document(documentId)
-          .get();
-      await Firestore.instance
-          .collection('CV')
-          .document(documentId)
-          .set(cvData.map);
+  try {
+    final documentId = widget.cv['id'];
 
-      await Firestore.instance
-          .collection('Archive')
-          .document(documentId)
-          .delete();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('CV unarchived successfully'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      Navigator.of(context).pop();
-    } catch (e) {
-      // Handle errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error unarchiving CV: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+    // Step 1: Fetch the CV data from the Archive collection
+    final cvData = await Firestore.instance
+        .collection('Archive')
+        .document(documentId)
+        .get();
+    // Step 2: Update the isArchived field in the CV data
+    final updatedData = Map<String, dynamic>.from(cvData.map);
+    updatedData['isArchived'] = 'No'; // Update the field
+    // Step 3: Move the document to the CV collection
+    await Firestore.instance
+        .collection('CV')
+        .document(documentId)
+        .set(updatedData); // Use updatedData instead of cvData.map
+    // Step 4: Delete the document from the Archive collection
+    await Firestore.instance
+        .collection('Archive')
+        .document(documentId)
+        .delete();
+    // Step 5: Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('CV unarchived successfully'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+    // Step 6: Update the UI state (if needed)
+    setState(() {
+      widget.cv['isArchived'] = 'No'; // Update the local state
+    });
+    // Step 7: Navigate back
+    Navigator.of(context).pop();
+  } catch (e) {
+    // Handle errors with detailed logging
+    debugPrint('Error unarchiving CV: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error unarchiving CV: ${e.toString()}'),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
+}
 
   Widget _buildDetailCard(BuildContext context) {
     final sortedEntries = widget.cv.entries.toList()
