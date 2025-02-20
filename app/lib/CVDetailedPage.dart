@@ -171,63 +171,84 @@ class _CVDetailPageState extends State<CVDetailPage> {
   }
 
   // Function to archive a CV
-  Future<void> _archiveCV() async {
-    try {
-      final documentId = widget.cv['id'];
-
-      final cvData =
-          await Firestore.instance.collection('CV').document(documentId).get();
-
-      await Firestore.instance
-          .collection('Archive')
-          .document(documentId)
-          .set(cvData.map);
-
-      await Firestore.instance.collection('CV').document(documentId).delete();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('CV archived successfully'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      Navigator.of(context).pop();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error archiving CV: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  // Function to unarchive a CV
-  Future<void> _unarchiveCV() async {
+ // Function to archive a CV
+Future<void> _archiveCV() async {
   try {
     final documentId = widget.cv['id'];
 
-    // Step 1: Fetch the CV data from the Archive collection
+    // Fetch the current CV data from the 'CV' collection.
+    final cvData =
+        await Firestore.instance.collection('CV').document(documentId).get();
+
+    // Create a new map with updated isArchived field.
+    final updatedData = Map<String, dynamic>.from(cvData.map);
+    updatedData['isArchived'] = 'Yes';
+
+    // Save the updated data to the Archive collection.
+    await Firestore.instance
+        .collection('Archive')
+        .document(documentId)
+        .set(updatedData); // Use updatedData here
+
+    // Remove the document from the 'CV' collection.
+    await Firestore.instance.collection('CV').document(documentId).delete();
+
+    // Update the local state so the UI reflects the change.
+    setState(() {
+      widget.cv['isArchived'] = 'Yes';
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('CV archived successfully'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    Navigator.of(context).pop();
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error archiving CV: $e'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
+
+// Function to unarchive a CV
+Future<void> _unarchiveCV() async {
+  try {
+    final documentId = widget.cv['id'];
+
+    // Fetch the CV data from the Archive collection.
     final cvData = await Firestore.instance
         .collection('Archive')
         .document(documentId)
         .get();
-    // Step 2: Update the isArchived field in the CV data
+
+    // Create a new map with updated isArchived field.
     final updatedData = Map<String, dynamic>.from(cvData.map);
-    updatedData['isArchived'] = 'No'; // Update the field
-    // Step 3: Move the document to the CV collection
+    updatedData['isArchived'] = 'No';
+
+    // Move the document to the 'CV' collection using the updated data.
     await Firestore.instance
         .collection('CV')
         .document(documentId)
-        .set(updatedData); // Use updatedData instead of cvData.map
-    // Step 4: Delete the document from the Archive collection
+        .set(updatedData);
+
+    // Delete the document from the Archive collection.
     await Firestore.instance
         .collection('Archive')
         .document(documentId)
         .delete();
-    // Step 5: Show success message
+
+    // Update the local state so the UI reflects the change.
+    setState(() {
+      widget.cv['isArchived'] = 'No';
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('CV unarchived successfully'),
@@ -235,14 +256,9 @@ class _CVDetailPageState extends State<CVDetailPage> {
         duration: Duration(seconds: 2),
       ),
     );
-    // Step 6: Update the UI state (if needed)
-    setState(() {
-      widget.cv['isArchived'] = 'No'; // Update the local state
-    });
-    // Step 7: Navigate back
+
     Navigator.of(context).pop();
   } catch (e) {
-    // Handle errors with detailed logging
     debugPrint('Error unarchiving CV: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
