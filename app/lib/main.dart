@@ -49,17 +49,13 @@ class _FireStoreHomeState extends State<FireStoreHome> {
   String searchQuery = "";
   final ScrollController _scrollController = ScrollController();
 
-  // Filter checkboxes
   bool isSkillsChecked = false;
   bool isCertificationChecked = false;
   bool isEducationChecked = false;
   bool isLanguageChecked = false;
 
-  // Variable to track loading state
   bool isLoading = false;
   int cvCount = 0;
-
-  // Chart data
   Map<String, int> categoryCounts = {};
 
 // Chart Data Variables
@@ -452,26 +448,16 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           pythonPath,
           [scriptPath, filePath],
         );
-
         if (result.exitCode == 0) {
           jsonData = jsonDecode(result.stdout.trim());
-
-          // Check if the extracted data is valid (not null or empty)
-          if (jsonData != null && jsonData.isNotEmpty) {
-            // 🔹 Add the isAssigned field here
-            jsonData["isAssigned"] = "No";
-            break;
-          } else {
-            retryCount++;
-            _showSnackbar(
-                "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
-          }
+          retryCount++;
+          _showSnackbar(
+              "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
         } else {
           _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
           return;
         }
       }
-
       if (jsonData != null && jsonData.isNotEmpty) {
         await uploadDataToFirestore(jsonData);
       } else {
@@ -745,7 +731,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
         ),
         body: Row(
           children: [
-            _buildSidebarFilters(screenHeight),
+            _buildSidebarFilters(context, screenHeight),
             Expanded(
               child: TabBarView(
                 children: [
@@ -883,7 +869,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  'assets/images/ntgschool (1).png',
+                  'assets/images/ntgschool.png',
                   width: 80,
                   height: 50,
                   fit: BoxFit.cover,
@@ -943,7 +929,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
     );
   }
 
-  Widget _buildSidebarFilters(double screenHeight) {
+  Widget _buildSidebarFilters(BuildContext context, double screenHeight) {
     return Container(
       width: 250,
       height: screenHeight,
@@ -962,17 +948,19 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                 ),
               ),
               const SizedBox(width: 10),
-              Checkbox(
-                value: showArchivedCVs,
-                onChanged: (bool? newValue) {
-                  setState(() {
-                    showArchivedCVs = newValue!;
-                  });
-                  getData(); // Fetch data from the appropriate collection
-                  DefaultTabController.of(context)
-                      ?.animateTo(0); // Switch to the "Cvs" tab
-                },
-                activeColor: Colors.red,
+              Builder(
+                builder: (context) => Checkbox(
+                  value: showArchivedCVs,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      showArchivedCVs = newValue!;
+                    });
+                    getData();
+                    DefaultTabController.of(context)
+                        .animateTo(0); // Switch to "Cvs" tab
+                  },
+                  activeColor: Colors.red,
+                ),
               ),
             ],
           ),
@@ -983,7 +971,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           Row(
             children: [
               const Text(
-                'Show CVs Assigned',
+                'Show assigned CVs',
                 style: TextStyle(
                   color: Colors.red,
                   fontSize: 18,
@@ -991,17 +979,19 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                 ),
               ),
               const SizedBox(width: 10),
-              Checkbox(
-                value: showAssignedCVs,
-                onChanged: (bool? newValue) {
-                  setState(() {
-                    showAssignedCVs = newValue!;
-                  });
-                  getData(); // Fetch data from the appropriate collection
-                  DefaultTabController.of(context)
-                      ?.animateTo(0); // Switch to the "Cvs" tab
-                },
-                activeColor: Colors.red,
+              Builder(
+                builder: (context) => Checkbox(
+                  value: showAssignedCVs,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      showAssignedCVs = newValue!;
+                    });
+                    getData();
+                    DefaultTabController.of(context)
+                        .animateTo(0); // Switch to "Cvs" tab
+                  },
+                  activeColor: Colors.red,
+                ),
               ),
             ],
           ),
