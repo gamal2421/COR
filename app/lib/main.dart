@@ -762,8 +762,6 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                               ? buildCategoryChart(categoryCounts)
                               : const Text("No data available"),
                         ),
-                        // Skills Distribution Chart
-
                         // Certifications Overview Chart
                         Text(
                           "Certifications Overview",
