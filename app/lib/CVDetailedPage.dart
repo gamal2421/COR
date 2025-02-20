@@ -1,4 +1,3 @@
-import 'main.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,124 +49,124 @@ class _CVDetailPageState extends State<CVDetailPage> {
       ),
       floatingActionButton: widget.isArchived
           ? FloatingActionButton(
-        onPressed: _unarchiveCV,
-        child: const Icon(Icons.outbox_outlined, color: Colors.white),
-        heroTag: "Unarchive",
-        backgroundColor: Colors.red[800],
-      )
+              onPressed: _unarchiveCV,
+              heroTag: "Unarchive",
+              backgroundColor: Colors.red[800],
+              child: const Icon(Icons.outbox_outlined, color: Colors.white),
+            )
           : widget.cv['isAssigned'] == "Yes"
-          ? null // Hide buttons when in Assign collection
-          : Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // Assign/Unassign Button
-          FloatingActionButton(
-            heroTag: "AssignDeassign",
-            backgroundColor: Colors.red[800],
-            child: Icon(
-              widget.cv['isAssigned'] == "Yes"
-                  ? Icons.assignment_return_sharp
-                  : Icons.assignment_ind_sharp,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              bool confirm = await showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('Confirm ${widget.cv['isAssigned'] == "Yes" ? 'Unassign' : 'Assign'}'),
-                  content: Text('Are you sure you want to ${widget.cv['isAssigned'] == "Yes" ? 'unassign' : 'assign'} this CV?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('Cancel'),
+              ? null // Hide buttons when in Assign collection
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // Assign/Unassign Button
+                    FloatingActionButton(
+                      heroTag: "AssignDeassign",
+                      backgroundColor: Colors.red[800],
+                      child: Icon(
+                        widget.cv['isAssigned'] == "Yes"
+                            ? Icons.assignment_return_sharp
+                            : Icons.assignment_ind_sharp,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {
+                        bool confirm = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                                'Confirm ${widget.cv['isAssigned'] == "Yes" ? 'Unassign' : 'Assign'}'),
+                            content: Text(
+                                'Are you sure you want to ${widget.cv['isAssigned'] == "Yes" ? 'unassign' : 'assign'} this CV?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(true),
+                                child: Text('Confirm'),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (confirm == true) {
+                          // Proceed with assigning/unassigning
+                          try {
+                            final documentId = widget.cv['id'];
+                            final newStatus =
+                                widget.cv['isAssigned'] == "Yes" ? "No" : "Yes";
+                            if (newStatus == "Yes") {
+                              // Move the CV to the Assign collection
+                              final cvData = await Firestore.instance
+                                  .collection(
+                                      widget.isArchived ? 'Archive' : 'CV')
+                                  .document(documentId)
+                                  .get();
+                              // Update the isAssigned field to "Yes"
+                              cvData.map['isAssigned'] = "Yes";
+                              await Firestore.instance
+                                  .collection('Assign')
+                                  .document(documentId)
+                                  .set(cvData.map);
+                              // Remove the CV from the original collection
+                              await Firestore.instance
+                                  .collection(
+                                      widget.isArchived ? 'Archive' : 'CV')
+                                  .document(documentId)
+                                  .delete();
+                            } else {
+                              // Move the CV back to the original collection
+                              final cvData = await Firestore.instance
+                                  .collection('Assign')
+                                  .document(documentId)
+                                  .get();
+                              // Update the isAssigned field to "No"
+                              cvData.map['isAssigned'] = "No";
+                              await Firestore.instance
+                                  .collection(
+                                      widget.isArchived ? 'Archive' : 'CV')
+                                  .document(documentId)
+                                  .set(cvData.map);
+                              // Remove the CV from the Assign collection
+                              await Firestore.instance
+                                  .collection('Assign')
+                                  .document(documentId)
+                                  .delete();
+                            }
+                            setState(() {
+                              widget.cv['isAssigned'] = newStatus;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'CV ${newStatus == "Yes" ? 'assigned' : 'unassigned'} successfully'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error updating CV: $e'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
+                      },
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: Text('Confirm'),
+                    const SizedBox(width: 10),
+                    // Archive Button
+                    FloatingActionButton(
+                      heroTag: "Archive",
+                      onPressed: _archiveCV,
+                      backgroundColor: Colors.red[800],
+                      child: const Icon(Icons.archive, color: Colors.white),
                     ),
                   ],
                 ),
-              );
-
-              if (confirm == true) {
-                // Proceed with assigning/unassigning
-                try {
-                  final documentId = widget.cv['id'];
-                  final newStatus = widget.cv['isAssigned'] == "Yes" ? "No" : "Yes";
-
-                  if (newStatus == "Yes") {
-                    // Move the CV to the Assign collection
-                    final cvData = await Firestore.instance
-                        .collection(widget.isArchived ? 'Archive' : 'CV')
-                        .document(documentId)
-                        .get();
-
-                    // Update the isAssigned field to "Yes"
-                    cvData.map['isAssigned'] = "Yes";
-
-                    await Firestore.instance
-                        .collection('Assign')
-                        .document(documentId)
-                        .set(cvData.map);
-
-                    // Remove the CV from the original collection
-                    await Firestore.instance
-                        .collection(widget.isArchived ? 'Archive' : 'CV')
-                        .document(documentId)
-                        .delete();
-                  } else {
-                    // Move the CV back to the original collection
-                    final cvData = await Firestore.instance
-                        .collection('Assign')
-                        .document(documentId)
-                        .get();
-
-                    // Update the isAssigned field to "No"
-                    cvData.map['isAssigned'] = "No";
-
-                    await Firestore.instance
-                        .collection(widget.isArchived ? 'Archive' : 'CV')
-                        .document(documentId)
-                        .set(cvData.map);
-
-                    // Remove the CV from the Assign collection
-                    await Firestore.instance
-                        .collection('Assign')
-                        .document(documentId)
-                        .delete();
-                  }
-
-                  setState(() {
-                    widget.cv['isAssigned'] = newStatus;
-                  });
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('CV ${newStatus == "Yes" ? 'assigned' : 'unassigned'} successfully'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Error updating CV: $e'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            },
-          ),
-          const SizedBox(width: 10),
-          // Archive Button
-          FloatingActionButton(
-            heroTag: "Archive",
-            onPressed: _archiveCV,
-            backgroundColor: Colors.red[800],
-            child: const Icon(Icons.archive, color: Colors.white),
-          ),
-        ],
-      ),
     );
   }
 
@@ -176,20 +175,15 @@ class _CVDetailPageState extends State<CVDetailPage> {
     try {
       final documentId = widget.cv['id'];
 
-      final cvData = await Firestore.instance
-          .collection('CV')
-          .document(documentId)
-          .get();
+      final cvData =
+          await Firestore.instance.collection('CV').document(documentId).get();
 
       await Firestore.instance
           .collection('Archive')
           .document(documentId)
           .set(cvData.map);
 
-      await Firestore.instance
-          .collection('CV')
-          .document(documentId)
-          .delete();
+      await Firestore.instance.collection('CV').document(documentId).delete();
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -214,12 +208,10 @@ class _CVDetailPageState extends State<CVDetailPage> {
   Future<void> _unarchiveCV() async {
     try {
       final documentId = widget.cv['id'];
-
       final cvData = await Firestore.instance
           .collection('Archive')
           .document(documentId)
           .get();
-
       await Firestore.instance
           .collection('CV')
           .document(documentId)
@@ -275,7 +267,8 @@ class _CVDetailPageState extends State<CVDetailPage> {
                 ),
                 child: Text(
                   'Assigned',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             SizedBox(height: 8),
@@ -493,10 +486,10 @@ class _CVDetailPageState extends State<CVDetailPage> {
               children: value
                   .map<Widget>(
                     (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: buildListItem(context, item),
-                ),
-              )
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      child: buildListItem(context, item),
+                    ),
+                  )
                   .toList(),
             )
           else if (value is Map)
