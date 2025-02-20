@@ -448,16 +448,27 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           pythonPath,
           [scriptPath, filePath],
         );
+
         if (result.exitCode == 0) {
           jsonData = jsonDecode(result.stdout.trim());
-          retryCount++;
-          _showSnackbar(
-              "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
+
+          // Check if the extracted data is valid (not null or empty)
+          if (jsonData != null && jsonData.isNotEmpty) {
+            // 🔹 Add the isAssigned field here
+            jsonData["isAssigned"] = "No";
+            jsonData["isArchived"] = "No";
+            break;
+          } else {
+            retryCount++;
+            _showSnackbar(
+                "⚠ Retrying extraction... Attempt $retryCount", Colors.orange);
+          }
         } else {
           _showSnackbar("❌ Error running script: ${result.stderr}", Colors.red);
           return;
         }
       }
+
       if (jsonData != null && jsonData.isNotEmpty) {
         await uploadDataToFirestore(jsonData);
       } else {
