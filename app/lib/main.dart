@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:process_run/process_run.dart';
 import 'package:flutter/material.dart'; // Only Material Design
+import 'package:untitled2/assign%20page.dart';
 import 'CVDetailedPage.dart';
 
 const projectId = 'ocrcv-1e6fe';
@@ -341,7 +342,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
             bool techMatch = selectedTechnologyFilter == "All Technologies" ||
                 (project['Technologies'] is List &&
                     (project['Technologies'] as List).any(
-                        (tech) => tech['Name'] == selectedTechnologyFilter));
+                            (tech) => tech['Name'] == selectedTechnologyFilter));
 
             if (projectMatch && techMatch) {
               String projectName = project['Name'];
@@ -398,23 +399,23 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
     applicationStatusCounts["Submitted"] = allCVs
         .where((cv) =>
-            cv["ApplicationTracking"] != null &&
-            cv["ApplicationTracking"]["Status"] == "Submitted")
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Submitted")
         .length;
     applicationStatusCounts["Interview Scheduled"] = allCVs
         .where((cv) =>
-            cv["ApplicationTracking"] != null &&
-            cv["ApplicationTracking"]["Status"] == "Interview Scheduled")
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Interview Scheduled")
         .length;
     applicationStatusCounts["Accepted"] = allCVs
         .where((cv) =>
-            cv["ApplicationTracking"] != null &&
-            cv["ApplicationTracking"]["Status"] == "Accepted")
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Accepted")
         .length;
     applicationStatusCounts["Rejected"] = allCVs
         .where((cv) =>
-            cv["ApplicationTracking"] != null &&
-            cv["ApplicationTracking"]["Status"] == "Rejected")
+    cv["ApplicationTracking"] != null &&
+        cv["ApplicationTracking"]["Status"] == "Rejected")
         .length;
   }
 
@@ -525,7 +526,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
 
   Widget buildCertificationsOverviewChart() {
     List<PieChartSectionData> sections =
-        certificationCounts.entries.map((entry) {
+    certificationCounts.entries.map((entry) {
       return PieChartSectionData(
         value: entry.value.toDouble(),
         title: '${entry.key}\n(${entry.value})',
@@ -712,6 +713,18 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           actions: [
             IconButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AssignPage()),
+                );
+              },
+              icon: const Icon(
+                Icons.assignment_turned_in_rounded,
+                color: Colors.white,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
                 getData();
               },
               icon: const Icon(
@@ -719,6 +732,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                 color: Colors.white,
               ),
             ),
+
             const SizedBox(width: 20),
           ],
           bottom: const TabBar(
@@ -800,12 +814,12 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                                 _filterProjects(); // Apply filters when selection changes
                               },
                               items: projectList.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                             ),
 
                             // Technology Filter
@@ -820,11 +834,11 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                               items: technologyList
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                             ),
                           ],
                         ),
@@ -838,7 +852,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
                         filteredBarGroups.isNotEmpty
                             ? buildProjectsContributionChart()
                             : const Text(
-                                "No project contribution data available"),
+                            "No project contribution data available"),
 
                         const SizedBox(height: 120),
 
@@ -976,34 +990,7 @@ class _FireStoreHomeState extends State<FireStoreHome> {
           SizedBox(
             height: 20,
           ),
-          const Divider(),
-          Row(
-            children: [
-              const Text(
-                'Show assigned CVs',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Builder(
-                builder: (context) => Checkbox(
-                  value: showAssignedCVs,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      showAssignedCVs = newValue!;
-                    });
-                    getData();
-                    DefaultTabController.of(context)
-                        .animateTo(0); // Switch to "Cvs" tab
-                  },
-                  activeColor: Colors.red,
-                ),
-              ),
-            ],
-          ),
+
           SizedBox(
             height: 20,
           ),
