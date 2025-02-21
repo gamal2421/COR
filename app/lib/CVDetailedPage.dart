@@ -60,12 +60,15 @@ class _CVDetailPageState extends State<CVDetailPage> {
               color: Colors.white,
             ),
           ),
-          const SizedBox(width: 10),
-          FloatingActionButton(
-            onPressed: _assignCV, // Call the _assignCV method
-            backgroundColor: Colors.red[800],
-            child: const Icon(Icons.assignment_ind_rounded, color: Colors.white),
-          ),
+          if (cv['isArchived'] != 'Yes') ...[
+            const SizedBox(width: 10),
+            FloatingActionButton(
+              onPressed: _assignCV, // Call the _assignCV method
+              backgroundColor: Colors.red[800],
+              child:
+                  const Icon(Icons.assignment_ind_rounded, color: Colors.white),
+            ),
+          ],
         ],
       ),
     );
@@ -78,7 +81,7 @@ class _CVDetailPageState extends State<CVDetailPage> {
 
       // Fetch the current CV data from the 'CV' collection.
       final cvData =
-      await Firestore.instance.collection('CV').document(documentId).get();
+          await Firestore.instance.collection('CV').document(documentId).get();
 
       // Create a new map with updated isArchived field.
       final updatedData = Map<String, dynamic>.from(cvData.map);
@@ -465,10 +468,10 @@ class _CVDetailPageState extends State<CVDetailPage> {
               children: value
                   .map<Widget>(
                     (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: buildListItem(context, item),
-                ),
-              )
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      child: buildListItem(context, item),
+                    ),
+                  )
                   .toList(),
             )
           else if (value is Map)
